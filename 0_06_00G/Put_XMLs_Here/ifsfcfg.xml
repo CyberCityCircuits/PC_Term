@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eps:ifsfConfig xmlns:net="urn:vfi-sapphire:np.network.2005-02-18" xmlns:eps="urn:vfi-sapphire:np.network.eps.2005-05-10" xmlns:vs="urn:vfi-sapphire:vs.2001-10-01" xmlns:base="urn:vfi-sapphire:base.2001-10-01" xmlns:ifsf="urn:vfi-sapphire:ifsfconfigtopaz.2006-12-12" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<vs:site>123</vs:site>
+	<ifsfCfg>
+		<ifsfTopazPopId>001</ifsfTopazPopId>
+		<ifsfTopazPopId>002</ifsfTopazPopId>
+		<ifsfTopazPopId>003</ifsfTopazPopId>
+		<ifsfTopazPopId>004</ifsfTopazPopId>
+		<ifsfTopazPopId>005</ifsfTopazPopId>
+		<ifsfTopazPopId>006</ifsfTopazPopId>
+		<ifsfTopazPopId>007</ifsfTopazPopId>
+		<ifsfTopazPopId>008</ifsfTopazPopId>
+		<ifsfTopazPopId>009</ifsfTopazPopId>
+		<ifsfTopazPopId>010</ifsfTopazPopId>
+		<ifsfTopazPopId>011</ifsfTopazPopId>
+		<ifsfTopazPopId>012</ifsfTopazPopId>
+		<ifsfTopazPopId>013</ifsfTopazPopId>
+		<ifsfTopazPopId>014</ifsfTopazPopId>
+		<ifsfTopazPopId>015</ifsfTopazPopId>
+		<ifsfTopazPopId>016</ifsfTopazPopId>
+		<ifsfTopazPopId>017</ifsfTopazPopId>
+		<ifsfTopazPopId>018</ifsfTopazPopId>
+		<ifsfTopazPopId>019</ifsfTopazPopId>
+		<ifsfTopazPopId>020</ifsfTopazPopId>
+		<ifsfTopazPopId>021</ifsfTopazPopId>
+		<ifsfTopazPopId>022</ifsfTopazPopId>
+		<ifsfTopazPopId>023</ifsfTopazPopId>
+		<ifsfTopazPopId>024</ifsfTopazPopId>
+		<ifsfTopazPopId>025</ifsfTopazPopId>
+		<ifsfPOSRefreshTimer>60</ifsfPOSRefreshTimer>
+		<ifsfDeviceRequestDefaultTimer>75</ifsfDeviceRequestDefaultTimer>
+		<ifsfTORequest>5</ifsfTORequest>
+		<ifsfTOConnect>0.5</ifsfTOConnect>
+		<ifsfTOResponse>30</ifsfTOResponse>
+		<ifsfMaxRepetition>3</ifsfMaxRepetition>
+		<ifsfServiceWaitingPort>4002</ifsfServiceWaitingPort>
+		<ifsfCardWaitingPort>4001</ifsfCardWaitingPort>
+		<ifsfDeviceWaitingPort>4003</ifsfDeviceWaitingPort>
+		<ifsfDeviceRequestPort>4004</ifsfDeviceRequestPort>
+		<ifsfUnsolicitedServiceWaitingPort>4005</ifsfUnsolicitedServiceWaitingPort>
+		<ifsfViperIpAddr>192.168.31.13</ifsfViperIpAddr>
+	</ifsfCfg>
+</eps:ifsfConfig>
