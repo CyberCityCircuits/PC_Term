@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain:groups xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><group><name>Manager</name></group><group><name>Fuel</name></group><group><name>Period1</name><reportName>Summary By Register</reportName><reportName>Department</reportName><reportName>Tax</reportName><reportName>Fuel DCR Statistics</reportName><reportName>Fuel Tank</reportName><reportName>Network Card</reportName><reportName>Safe Drop</reportName></group><group><name>Period2</name><reportName>Summary By Register</reportName><reportName>Department</reportName><reportName>Tax</reportName><reportName>Fuel DCR Statistics</reportName><reportName>Fuel Tank</reportName><reportName>Network Card</reportName><reportName>Safe Drop</reportName></group><group><name>Period3</name><reportName>Summary By Register</reportName><reportName>Department</reportName><reportName>Tax</reportName><reportName>Fuel DCR Statistics</reportName><reportName>Fuel Tank</reportName><reportName>Network Card</reportName></group><group><name>Period4</name><reportName>Summary By Register</reportName><reportName>Department</reportName><reportName>Tax</reportName><reportName>Fuel DCR Statistics</reportName><reportName>Fuel Tank</reportName><reportName>Network Card</reportName></group><groupsMasterList>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Summary By Register</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Category</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Deal</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Department</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Hourly</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Loyalty Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">PLU</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">PLU Promo</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Tax</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fuel Autocollect</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Fuel Blend Product</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Fuel Cash Acceptor</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Fuel Dispenser</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fuel DCR Statistics</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fueling Position/ Product (Hose)</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fueling Position/ Product (Hose) Running</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fueling Position/ Product (Hose) Test</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fuel Product/ Price Level</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fuel Service Level/ Price Level</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fuel Tank</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fuel Tank Reconciliation</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fuel Tier/ Product</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">POP Fuel Discount</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">POP Discount Definition Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Network Card</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Network Product</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Carwash Pay Point</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">E-Safe Content Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">E-Safe End Of Day Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Proprietary Network Card</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Proprietary Network Product</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">PLU Exception</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Safe Drop</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">EPS Network Reporting</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">MoneyOrder</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Unpaid Transactions Report</reportNameML>
+	</groupsMasterList></domain:groups>

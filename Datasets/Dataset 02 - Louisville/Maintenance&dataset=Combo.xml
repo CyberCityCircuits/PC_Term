@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<NAXML-MaintenanceRequest version="3.4" xmlns="http://www.naxml.org/POSBO/Vocabulary/2003-10-16">
+	<TransmissionHeader>
+		<StoreLocationID>1</StoreLocationID>
+		<VendorName>VeriFone</VendorName>
+		<VendorModelVersion>Commander Site Controller</VendorModelVersion>
+	</TransmissionHeader>
+	<ComboMaintenance>
+		<TableAction type="initialize"/>
+		<RecordAction type="addchange"/>
+	</ComboMaintenance>
+</NAXML-MaintenanceRequest>

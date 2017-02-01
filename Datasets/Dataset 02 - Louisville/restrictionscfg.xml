@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain:restrictionsConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><site>1</site><ageValidations><ageValidation sysid="1" name="ALCOHOL ID CHECK" minAge="21"/><ageValidation sysid="2" name="TOBACCO ID CHECK" minAge="18"/></ageValidations><blueLaws/><pluPromos/></domain:restrictionsConfig>
