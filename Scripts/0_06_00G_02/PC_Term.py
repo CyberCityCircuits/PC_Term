@@ -531,11 +531,14 @@ def process_write_flags(dept, value):
             #create flags subchild if it doesn't already exist.
             if not plu.find('flags'):
                 plu.append(new_tag)
-                #print ("  Creating Flags Sub-Element")
+                print ("  Creating Flags Sub-Element")
             
             if not plu.find('flags', {'sysid': 4}):
-                #print ("  ADD FOOD STAMP CHECK")
-                plu.flags.append(soup.new_tag(flag_value))                
+                                           
+                new_tag = soup.new_tag(flag_value)
+                plu.flags.append(new_tag)
+                
+                print ("  Creating Food Stamp Flag")
                 x += 1
     
     #for department in soup.find_all('department'):
@@ -547,7 +550,14 @@ def process_write_flags(dept, value):
             #create flags subchild if it doesn't already exist.
     #        if not department.find_parent('PLU').find('flags'):
     #            department.find_parent('PLU').append(new_tag)
-
+    
+    
+    xmlin.close()
+        
+    with open(outfile, 'w') as xmlout:
+        xmlout.write(soup.prettify())
+    
+    xmlout.close()
     
     
     f = open(dir_temp + "\\" + log_name + ".txt","a")
@@ -830,7 +840,7 @@ def set_food_stamps():
     print ("  Enter 'dept' For a List of Departments.")
     print ("  Enter 0 When Done.")
     #print (str(full_dept_list))
-    add_id = input("  Choose A Department For Tobacco ID Check: ")
+    add_id = input("  Choose A Department To Add Food Stamps: ")
     
     #print (add_id.isdigit())
     #os.system("pause")
