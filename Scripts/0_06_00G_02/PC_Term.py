@@ -18,7 +18,7 @@ import re
 #set varibles
 application = "PC_Term"
 long_app = "Product Code Terminator"
-version = "0.06.00F"
+version = "0.06.00G"
 email = "David@DREAM-Enterprise.com"
 name = long_app + "  V" + version
 dir_fresh = "Put_XMLs_Here"
@@ -39,6 +39,7 @@ export_complete = 1
 fs = "Not Food Stamp"
 dept_tobacco_id = []
 dept_alcohol_id = []
+dept_food_stamps = []
 full_dept_list = []
 
 #define system varibles
@@ -321,6 +322,8 @@ def logo():
     
 #main menu
 def main_menu():
+    global dept_food_stamp, dept_tobacco_id, dept_alcohol_id
+    
     header()
     print ()
     print ()
@@ -360,10 +363,13 @@ def main_menu():
     elif option == ("5"):
         run_pc_term()
     elif option == ("6"):
+        dept_alcohol_id = []
+        dept_tobacco_id = []    
         reset_idchecks()
     elif option == ("7"):
         process_remove_fs()
     elif option == ("8"):
+        dept_food_stamp = []
         set_food_stamps()
     elif option == ("9"):
         chk_store_backup()
@@ -416,8 +422,9 @@ def mk_log():
 #Removed all Food Stamp Tags.  Verified Working.    
 def process_remove_fs():
     chk_file_temp("PLUs.xml")
+    set_date_time()
     header()
-
+    print ("Processing...".center(cent_width))
     infile  = os.path.abspath(dir_temp + "/" + plu_xml)
     outfile = os.path.abspath(dir_temp + "/" + plu_xml)
     
@@ -436,7 +443,14 @@ def process_remove_fs():
         xmlout.write(soup.prettify())
         
     xmlout.close()
+    
+    f = open(dir_temp + "\\" + log_name + ".txt","a")
+    f.write("Remove Food Stamp Flags " + currdate + " " + currtime + "\n")
+    f.write("\n")
+    f.close()   
 
+    
+    header()
     print ("All Food Stamp Tags Removed".center(cent_width))
     sleep(2)
     
@@ -462,8 +476,57 @@ def process_remove_pcode():
 
 
 def process_write_flags(dept, value):
-    header()
+    
+    set_date_time()
+    #new_tag = soup.new_tag("flags")
+    x=0
+    if value == 1:
+        flag_value = ('domain:flag sysid="1"')
+    elif value == 2:
+        flag_value = ('domain:flag sysid="2"')
+    elif value == 3:
+        flag_value = ('domain:flag sysid="3"')    
+    elif value == 4:
+        flag_value = ('domain:flag sysid="4"')
+    else:
+        #error logging
+        header()
+        print ("There was a major error.".center(cent_width))
+        print ("Please send the PC_Term_Report to David Ray.".center(cent_width))
+        
+        set_date_time()
+        
+        f = open(dir_temp + "\\" + log_name + ".txt","a")
+        f.write("Error writing flags. " + currdate + " " + currtime + "\n")
+        f.write("Location - process_write_flags\n")
+        f.write("Department - " + str(dept) + "\n")
+        f.write("Value - " + str(value) + "\n")
+        f.write("\n")
+        f.close()   
+        print()
+        print()
+        print()
+        os.system("pause")
+        main_menu()
 
+    
+    #Process for actually checking if flag already exists and then adding it as needed.    
+    print ("Add Food Stamps", dept, value, flag_value)
+    
+    
+    
+    
+    f = open(dir_temp + "\\" + log_name + ".txt","a")
+    f.write("Writing Food Stamps " + currdate + " " + currtime + "\n")
+    f.write("Department - " + str(dept) + "\n")
+    f.write("Value - " + str(value) + "\n")
+    f.write("Amount Added - " + str(x) + "\n")
+    f.write("\n")
+    f.close()   
+
+    
+    sleep(2)
+    
     
     
     
@@ -625,8 +688,7 @@ def reset_idchecks():
     
     sleep(2)
 
-    dept_alcohol_id = []
-    dept_tobacco_id = []
+
 
     set_tobacco_ID()
 
@@ -643,13 +705,13 @@ def run_pc_term():
     
     #import data
     infile  = os.path.abspath(dir_temp + "/" + plu_xml)
-    outfile = os.path.abspath(dir_temp + "/" + plu_xml_2)
+    #outfile = os.path.abspath(dir_temp + "/" + plu_xml)
 
-    with open (infile, "r") as raw_data:
-        str_data = raw_data.readlines()        
+    with open (infile, "r") as xmlin:
+        str_data = xmlin.readlines()        
     #count PLUs
     count_occ = len(re.findall(count_tag, str(str_data)))
-    raw_data.close()
+    xmlin.close()
 
     #run command to remove product codes
     process_remove_pcode()  
@@ -712,7 +774,123 @@ def set_date_time():
     currtime = dt.datetime.now().strftime("%H%M%S")
 
 def set_food_stamps():
-    header() 
+    
+    chk_file_temp(plu_xml)
+    chk_file_temp("poscfg.xml")
+    
+    tree = et.parse(dir_temp + "//" + "poscfg.xml")
+    root = tree.getroot()
+    
+    full_dept_list = []
+    for dept in root.iter('department'):
+        attributes = (dept.attrib)
+        sysid = (attributes["sysid"])
+        full_dept_list.append(sysid)
+        #full_dept_list.append(sysid)
+        
+    dept_food_stamps.sort()
+    header()
+    print ("  ID Set To:" + str(dept_food_stamps))
+    print()
+    print ("  Enter 'dept' For a List of Departments.")
+    print ("  Enter 0 When Done.")
+    #print (str(full_dept_list))
+    add_id = input("  Choose A Department For Tobacco ID Check: ")
+    
+    #print (add_id.isdigit())
+    #os.system("pause")
+    
+    add_id_val_chk = add_id.isdigit()
+    
+    if add_id_val_chk:
+        #if length is greater than 4 characters it is invalid
+        if len(add_id) > 4:
+            header()
+            print ("  ID Set To:" + str(dept_food_stamps))
+            print()
+            print ("  Invalid Entry.")
+            sleep(1)
+            set_food_stamps()
+            
+        #0 Completes Input Process
+        elif add_id == "0":
+            header()
+            print("   Please Confirm: " + str(dept_food_stamps))
+            print ()
+            option = input("  Is This Correct? [Y/N]")
+            if option.lower( )== ("y"):
+                #file_idchk = (dir_temp + "/" + plu_xml)
+                #subchild_tobacco = '<idChecks>\n<domain:idCheck sysid="1"/>\n</idChecks>'
+                #subchild_tobacco = id_checks.pop(0)
+                #print (subchild_tobacco)
+                #os.system("pause")
+                print ()
+                for dept in dept_food_stamps:
+                    print ("  Processing Department " + str(dept))
+                    sleep(.5)
+                for dept in dept_food_stamps:
+                    print ("  Adding to Department " + str(dept))
+                    
+                    sleep(.01)
+                    process_write_flags(dept, 4)
+                
+                sleep(2)
+                header()
+                print ("Food Stamp Flags Have Been Added".center(cent_width))
+                sleep(2)
+                main_menu()
+            else:
+                set_food_stamps()
+           
+           
+        else:
+            
+            #check add_id against the existing entries
+            if dept_food_stamps.count(add_id):
+                header()
+                print ("  ID Set To:" + str(dept_food_stamps))
+                print ()
+                print ("  Item Already in List.")
+                sleep(1)
+                set_food_stamps()
+            #check add_id against a list of known departments    
+            elif not full_dept_list.count(add_id):
+                header()
+                print ("  ID Set To:" + str(dept_food_stamps))
+                print ()
+                print ("  You Have Entered an Invalid Department.")
+                sleep(1)
+                set_food_stamps()
+                
+            else:
+                dept_food_stamps.append(add_id)
+                
+                set_food_stamps()
+                
+                
+    else:
+        #list departments for reference
+        if add_id.lower() == "dept":
+            list_dept()
+            set_food_stamps()
+        else:
+            header()
+            print ("  ID Set To:" + str(dept_food_stamps))
+            print()
+            print ("  Invalid Entry.")
+            sleep(1)
+            set_food_stamps()
+
+    set_food_stamps()
+
+    
+    
+    
+    
+    
+    
+    
+    
     
 #Set Tobacco ID Checks    
 def set_tobacco_ID():
