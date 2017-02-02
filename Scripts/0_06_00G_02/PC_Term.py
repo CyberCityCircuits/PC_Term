@@ -322,7 +322,7 @@ def logo():
     
 #main menu
 def main_menu():
-    global dept_food_stamp, dept_tobacco_id, dept_alcohol_id
+    global dept_food_stamps, dept_tobacco_id, dept_alcohol_id
     
     header()
     print ()
@@ -369,7 +369,7 @@ def main_menu():
     elif option == ("7"):
         process_remove_fs()
     elif option == ("8"):
-        dept_food_stamp = []
+        dept_food_stamps = []
         set_food_stamps()
     elif option == ("9"):
         chk_store_backup()
@@ -476,9 +476,11 @@ def process_remove_pcode():
 
 
 def process_write_flags(dept, value):
+    infile  = os.path.abspath(dir_temp + "/" + plu_xml)
+    outfile = os.path.abspath(dir_temp + "/" + plu_xml)
     
     set_date_time()
-    #new_tag = soup.new_tag("flags")
+    
     x=0
     if value == 1:
         flag_value = ('domain:flag sysid="1"')
@@ -511,9 +513,41 @@ def process_write_flags(dept, value):
 
     
     #Process for actually checking if flag already exists and then adding it as needed.    
-    print ("Add Food Stamps", dept, value, flag_value)
+    print ("  Add Food Stamps", dept, value, flag_value)
+
+    with open(infile) as xmlin:
+        soup = bs(xmlin, 'xml')
+        new_tag = soup.new_tag("flags")
+        
+    for plu in soup.find_all('PLU'):
+        xmlin_dept = plu.department.get_text().strip()
+        #print (xmlin_dept)
+        #print (plu.department.get_text().strip())
+        
+        #CHECK TO SEE IF DEPT EXISTS.
+        if xmlin_dept == dept:
+            new_tag = soup.new_tag("flags")
+            #x+=1
+            #create flags subchild if it doesn't already exist.
+            if not plu.find('flags'):
+                plu.append(new_tag)
+                #print ("  Creating Flags Sub-Element")
+            
+            if not plu.find('flags', {'sysid': 4}):
+                #print ("  ADD FOOD STAMP CHECK")
+                plu.flags.append(soup.new_tag(flag_value))                
+                x += 1
     
-    
+    #for department in soup.find_all('department'):
+    #    xmlin_dept = department.get_text().strip()
+        
+        #CHECK TO SEE IF DEPT EXISTS.
+    #    if xmlin_dept == dept:
+    #        x+=1
+            #create flags subchild if it doesn't already exist.
+    #        if not department.find_parent('PLU').find('flags'):
+    #            department.find_parent('PLU').append(new_tag)
+
     
     
     f = open(dir_temp + "\\" + log_name + ".txt","a")
@@ -524,6 +558,7 @@ def process_write_flags(dept, value):
     f.write("\n")
     f.close()   
 
+    print ("  " + str(x) + " Food Stamp flags added to Department " + str(dept))
     
     sleep(2)
     
