@@ -521,11 +521,12 @@ def process_write_flags(dept, value):
         
     for plu in soup.find_all('PLU'):
         xmlin_dept = plu.department.get_text().strip()
-        #print (xmlin_dept)
+        print (xmlin_dept)
+        sleep(.0001)
         #print (plu.department.get_text().strip())
         
-        #CHECK TO SEE IF DEPT EXISTS.
-        if xmlin_dept == dept:
+        #CHECK TO SEE IF DEPT MATCHES.
+        if xmlin_dept.lstrip("0") == dept.lstrip("0"):
             new_tag = soup.new_tag("flags")
             #x+=1
             #create flags subchild if it doesn't already exist.
@@ -533,7 +534,7 @@ def process_write_flags(dept, value):
                 plu.append(new_tag)
                 print ("  Creating Flags Sub-Element")
             
-            if not plu.find('flags', {'sysid': 4}):
+            if not plu.find('flags', {'sysid': 4}):#THIS DOESN'T CHECK AGAINST THE TAG ALREADY EXISTING.
                                            
                 new_tag = soup.new_tag(flag_value)
                 plu.flags.append(new_tag)
