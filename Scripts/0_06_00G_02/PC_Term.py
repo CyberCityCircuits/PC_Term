@@ -534,7 +534,7 @@ def process_write_flags(dept, value):
                 plu.append(new_tag)
                 print ("  Creating Flags Sub-Element")
             
-            if not plu.find('flags', {'sysid': 4}):#THIS DOESN'T CHECK AGAINST THE TAG ALREADY EXISTING.
+            if not plu.find('flag', attrs={'sysid': 4}):#THIS DOESN'T CHECK AGAINST THE TAG ALREADY EXISTING.
                                            
                 new_tag = soup.new_tag(flag_value)
                 plu.flags.append(new_tag)
