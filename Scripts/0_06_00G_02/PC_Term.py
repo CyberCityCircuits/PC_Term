@@ -18,7 +18,7 @@ import re
 #set varibles
 application = "PC_Term"
 long_app = "Product Code Terminator"
-version = "0.06.00G"
+version = "0.06.00F"
 email = "David@DREAM-Enterprise.com"
 name = long_app + "  V" + version
 dir_fresh = "Put_XMLs_Here"
@@ -427,6 +427,88 @@ def process_remove_pcode():
     print ("  Processing...")
     sleep(2)
 
+
+    
+def process_write_id_chk(dept, value):
+    x = 0
+    infile  = os.path.abspath(dir_temp + "/" + plu_xml)
+    outfile = os.path.abspath(dir_temp + "/" + plu_xml)
+    
+    #value = 3
+    
+    if value == 1:
+        idchk_value = ('domain:idCheck sysid="1"')
+    elif value == 2:
+        idchk_value = ('domain:idCheck sysid="2"')
+    else:
+        header()
+        print ("There was a major error.".center(cent_width))
+        print ("Please send the PC_Term_Report to David Ray.".center(cent_width))
+        
+        set_date_time()
+        
+        f = open(dir_temp + "\\" + log_name + ".txt","a")
+        f.write("Error writing ID checks. " + currdate + " " + currtime + "\n")
+        
+        f.write("Location - process_write_id_chk\n")
+        f.write("Department - " + str(dept) + "\n")
+        f.write("Value - " + str(value) + "\n")
+        f.write("\n")
+        f.close()   
+        print()
+        print()
+        print()
+        os.system("pause")
+        main_menu()
+        
+    #subchild_Alcohol = ('<idChecks><domain:idCheck sysid="1"/></idChecks>')
+
+    with open(infile) as xmlin:
+        soup = bs(xmlin, 'xml')
+    
+    #print (soup)
+    #os.system("pause")
+    
+    #dept = "0001"
+    #THIS WORKS!!!!  FOUR DAYS OF AGONY IS COMING TO AN END!
+
+    for department in soup.find_all('department'):
+        xmlin_dept = department.get_text().strip()
+        #print (xmlin_dept)
+        if xmlin_dept.lstrip("0") == dept.lstrip("0"):
+            x+=1
+            
+            new_tag = soup.new_tag("idChecks")
+            department.find_parent('PLU').append(new_tag)
+            department.find_parent('PLU').idChecks.append(soup.new_tag(idchk_value))
+            #upc = department.find_parent('PLU').get_text()
+            #print ("  " + upc + " Add ID Check")
+            #print ("Added idChecks")
+
+            
+    xmlin.close()
+        
+    with open(outfile, 'w') as xmlout:
+        xmlout.write(soup.prettify())
+    
+    xmlout.close()
+    
+    set_date_time()
+    
+    f = open(dir_temp + "\\" + log_name + ".txt","a")
+    f.write("Writing ID Checks " + currdate + " " + currtime + "\n")
+    f.write("Department - " + str(dept) + "\n")
+    f.write("Value - " + str(value) + "\n")
+    f.write("Amount Added - " + str(x) + "\n")
+    f.write("\n")
+    f.close()   
+
+    
+    print ("  " + str(x) + " ID Checks added to Department " + str(dept))
+    
+    
+    
+    
 #remove all id checks
 def reset_idchecks():
     global export_complete, dept_tobacco_id, dept_alcohol_id
@@ -808,84 +890,7 @@ def set_alcohol_ID():
 
     set_alcohol_ID()
     
-    
-def process_write_id_chk(dept, value):
-    x = 0
-    infile  = os.path.abspath(dir_temp + "/" + plu_xml)
-    outfile = os.path.abspath(dir_temp + "/" + plu_xml)
-    
-    #value = 3
-    
-    if value == 1:
-        idchk_value = ('domain:idCheck sysid="1"')
-    elif value == 2:
-        idchk_value = ('domain:idCheck sysid="2"')
-    else:
-        header()
-        print ("There was a major error.".center(cent_width))
-        print ("Please send the PC_Term_Report to David Ray.".center(cent_width))
-        
-        set_date_time()
-        
-        f = open(dir_temp + "\\" + log_name + ".txt","a")
-        f.write("Error writing ID checks. " + currdate + " " + currtime + "\n")
-        
-        f.write("Location - process_write_id_chk\n")
-        f.write("Department - " + str(dept) + "\n")
-        f.write("Value - " + str(value) + "\n")
-        f.write("\n")
-        f.close()   
-        print()
-        print()
-        print()
-        os.system("pause")
-        main_menu()
-        
-    #subchild_Alcohol = ('<idChecks><domain:idCheck sysid="1"/></idChecks>')
 
-    with open(infile) as xmlin:
-        soup = bs(xmlin, 'xml')
-    
-    #print (soup)
-    #os.system("pause")
-    
-    #dept = "0001"
-    #THIS WORKS!!!!  FOUR DAYS OF AGONY IS COMING TO AN END!
-
-    for department in soup.find_all('department'):
-        xmlin_dept = department.get_text().strip()
-        #print (xmlin_dept)
-        if xmlin_dept.lstrip("0") == dept.lstrip("0"):
-            x+=1
-            
-            new_tag = soup.new_tag("idChecks")
-            department.find_parent('PLU').append(new_tag)
-            department.find_parent('PLU').idChecks.append(soup.new_tag(idchk_value))
-            #upc = department.find_parent('PLU').get_text()
-            #print ("  " + upc + " Add ID Check")
-            #print ("Added idChecks")
-
-            
-    xmlin.close()
-        
-    with open(outfile, 'w') as xmlout:
-        xmlout.write(soup.prettify())
-    
-    xmlout.close()
-    
-    set_date_time()
-    
-    f = open(dir_temp + "\\" + log_name + ".txt","a")
-    f.write("Writing ID Checks " + currdate + " " + currtime + "\n")
-    f.write("Department - " + str(dept) + "\n")
-    f.write("Value - " + str(value) + "\n")
-    f.write("Amount Added - " + str(x) + "\n")
-    f.write("\n")
-    f.close()   
-
-    
-    print ("  " + str(x) + " ID Checks added to Department " + str(dept))
-    
 #run commands
 if __name__ == "__main__":
     if os.path.exists(dir_temp):

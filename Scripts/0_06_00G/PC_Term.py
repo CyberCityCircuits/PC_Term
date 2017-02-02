@@ -626,6 +626,7 @@ def reset_fs():
         x += 1
         #print (("Checking... " + (str(x).rjust(5))).center(cent_width))
 
+        #THIS IS BAD.  IT REMOVES ALL FLAGS, NOT JUST FOOD STAMPS
         for tag in soup('flags'):
             tag.decompose()
 

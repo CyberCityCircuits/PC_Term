@@ -113,8 +113,68 @@ def reset_fs():
     sleep(2)
 
 
+def write_fs(dept, value):
+    
+    
+    if value == 1:
+        flag_value = ('domain:flag sysid="1"')
+    elif value == 2:
+        flag_value = ('domain:flag sysid="2"')
+    elif value == 3:
+        flag_value = ('domain:flag sysid="3"')    
+    elif value == 4:
+        flag_value = ('domain:flag sysid="4"')    
+
+    x = 0
+    infile  = os.path.abspath(dir_temp + "/" + plu_xml)
+    outfile = os.path.abspath(dir_temp + "/" + plu_xml)
+
+    with open(infile) as xmlin:
+        soup = bs(xmlin, 'xml')
+
+    new_tag = soup.new_tag("flags")
+        
+    for department in soup.find_all('department'):
+        xmlin_dept = department.get_text().strip()
+    
+        #CHECK TO SEE IF DEPT MATCHES.
+        if xmlin_dept.lstrip("0") == dept.lstrip("0"):
+            print ("department match")
+            x+=1
+            #create flags subchild if it doesn't already exist.
+            if not department.find_parent('PLU').find('flags'):
+                department.find_parent('PLU').append(new_tag)
+                print ("adding flags")
+            
+            if not department.find_parent('PLU').find('flags', {'sysid': 4}): # if no <flags sysid="4"> found
+                print ("Adding FS ", x)
+                department.find_parent('PLU').flags.append(soup.new_tag(flag_value))
+            
+    
+        
+        
+    #for plu in soup('PLU'):
+     #   xmlin_dept = plu.department.get_text().strip()
+        #print (xmlin_dept)
+        
+
+        
+        #print (plu)
+        #print (plu.department.text.lstrip("0"))
+        #if plu.department.text.strip() == dept:
+            #if not plu.find('flags', {'sysid': 4}): # if no <flags sysid="4"> found
+            #print ("Adding FS ", x)
+            #plu.flags.append(soup.new_tag(flag_value))
+    
+    x+=1
+    xmlin.close()
+        
+    with open(outfile, 'w') as xmlout:
+        xmlout.write(soup.prettify())
+    
+    xmlout.close()
 
 
-
-reset_fs()
+#reset_fs()
+write_fs('11',2)
         
