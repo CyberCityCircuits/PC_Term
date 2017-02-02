@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain:carWashPaypointConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><site>1</site><dayClosePeriod>2</dayClosePeriod><networkTimeout>60</networkTimeout></domain:carWashPaypointConfig>

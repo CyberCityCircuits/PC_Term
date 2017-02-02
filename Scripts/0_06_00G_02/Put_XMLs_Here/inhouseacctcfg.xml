@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain:houseAcctConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01" xmlns:vs="urn:vfi-sapphire:vs.2001-10-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><site>1</site><houseAccount enabled="1"><accountNumber>100</accountNumber><name>HOUSE CHARGE</name></houseAccount></domain:houseAcctConfig>

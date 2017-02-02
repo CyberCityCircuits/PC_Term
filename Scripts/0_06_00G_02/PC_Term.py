@@ -66,8 +66,8 @@ menu_03 = "3 - List All Departments"
 menu_04 = "4 - Function Not Supported"
 menu_05 = "5 - Remove Product Codes from PLU file"
 menu_06 = "6 - Reset All ID Checks"
-menu_07 = "7 - Function Not Supported"
-menu_08 = "8 - Function Not Supported"
+menu_07 = "7 - Remove All Food Stamp Checks"
+menu_08 = "8 - Set All Food Stamp Checks"
 menu_09 = "9 - Check Store Backup"
 
 #define commands
@@ -362,14 +362,18 @@ def main_menu():
     elif option == ("6"):
         reset_idchecks()
     elif option == ("7"):
-        funct_not_supp()
+        process_remove_fs()
     elif option == ("8"):
-        funct_not_supp()
+        set_food_stamps()
     elif option == ("9"):
         chk_store_backup()
     else:
         main_menu()    
     
+    
+
+    
+
     
 #make directories as needed
 def mk_dir(dir_name):
@@ -409,6 +413,34 @@ def mk_log():
     f.write("\n")
     f.close()    
 
+#Removed all Food Stamp Tags.  Verified Working.    
+def process_remove_fs():
+    chk_file_temp("PLUs.xml")
+    header()
+
+    infile  = os.path.abspath(dir_temp + "/" + plu_xml)
+    outfile = os.path.abspath(dir_temp + "/" + plu_xml)
+    
+    with open(infile) as xmlin:
+        soup = bs(xmlin, 'xml')
+
+    #for tag in soup('flags', {'sysid': 4}):
+    #for tag in soup(flags, sysid="4"):
+    for tag in soup(attrs={'sysid': '4'}):
+        tag.decompose()
+        #print ("Tag Removed")
+    
+    xmlin.close()
+    
+    with open(outfile, 'w') as xmlout:
+        xmlout.write(soup.prettify())
+        
+    xmlout.close()
+
+    print ("All Food Stamp Tags Removed".center(cent_width))
+    sleep(2)
+    
+    main_menu()
 
 #remove all product codes
 def process_remove_pcode():
@@ -428,6 +460,12 @@ def process_remove_pcode():
     sleep(2)
 
 
+
+def process_write_flags(dept, value):
+    header()
+
+    
+    
     
 def process_write_id_chk(dept, value):
     x = 0
@@ -596,7 +634,7 @@ def run_pc_term():
     global export_complete
 
 
-    #check is PLU fole is in dir_fresh
+    #check is PLU file is in dir_temp
     chk_file_temp("PLUs.xml")
     #mk_dir_temp()
     
@@ -673,7 +711,8 @@ def set_date_time():
     currdate = dt.date.today().strftime("%Y%m%d")
     currtime = dt.datetime.now().strftime("%H%M%S")
 
-  
+def set_food_stamps():
+    header() 
     
 #Set Tobacco ID Checks    
 def set_tobacco_ID():
