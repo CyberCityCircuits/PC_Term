@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<domain:dcrHeaderConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><site>AB123</site><dcrHeaders><dcrHeader sysid="1" message="WELCOME" mode="normal" enabled="1" justify="center"/></dcrHeaders></domain:dcrHeaderConfig>

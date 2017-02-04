@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<domain:bannerConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><site>AB123</site><banners><register sysid="1"><banner sysid="1" message="WEL COME TO JZ#2" rotateDisplay="0"/><banner sysid="2" message="THANK YOU" rotateDisplay="0"/></register><register sysid="2"><banner sysid="1" message="WEL COME TO JZ#2" rotateDisplay="0"/><banner sysid="2" message="THANK YOU" rotateDisplay="0"/></register></banners></domain:bannerConfig>
