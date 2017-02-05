@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<domain:carWashConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><site>1</site><isEnabled>0</isEnabled><department sysid="0"/><isPromptBefore>0</isPromptBefore><isPromptAfter>0</isPromptAfter><isMenuPresentation>0</isMenuPresentation><displayOrder>Unsorted</displayOrder><daysValid>14</daysValid></domain:carWashConfig>

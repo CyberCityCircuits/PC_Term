@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<domain:dcrTrailerConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><site>1</site><dcrTrailers><dcrTrailer sysid="1" message="THANK YOU" mode="normal" enabled="1" justify="center"/><dcrTrailer sysid="2" message="HAVE A NICE DAY" mode="normal" enabled="1" justify="center"/></dcrTrailers></domain:dcrTrailerConfig>

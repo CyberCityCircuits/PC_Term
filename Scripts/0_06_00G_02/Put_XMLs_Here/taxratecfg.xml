@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<domain:taxRateConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><site>1</site><taxRates><taxRate sysid="1" name="HIGH" indicator="H" isPriceIncsTax="0" isPromptExemption="0"><taxProperties rate="8.000" pctStartAmt="0.00"/><taxBreakPts/></taxRate><taxRate sysid="2" name="LOW" indicator="L" isPriceIncsTax="0" isPromptExemption="0"><taxProperties rate="4.000" pctStartAmt="0.00"/><taxBreakPts/></taxRate></taxRates></domain:taxRateConfig>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<viper:pinpadMessageConfig xmlns:fuel="urn:vfi-sapphire:fuel.2001-10-01" xmlns:vs="urn:vfi-sapphire:vs.2001-10-01" xmlns:viper="core.viper.verifone.com.2011-11-08">
-	<pinpadIdleText sysid="1">WELCOME TO VALERO</pinpadIdleText>
-	<pinpadSwipeText sysid="1">WELCOME TO VALERO</pinpadSwipeText>
-	<pinpadSwipeText sysid="2">SWIPE CARD</pinpadSwipeText>
-</viper:pinpadMessageConfig>
