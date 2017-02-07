@@ -1,58 +1,20 @@
-PC_Term
-David A Ray
+PC_Term (Product Code Terminator)
+V0_06_00H - Release: 02-05-2017
 
-V0_01_00 - 08-21-2016
+All software is original and does not infringe on any copyrights or licenses held by Verifone or any Verifone Authorize Service Company.
 
-V0_02_00 - 08-21-2016
+Note:  If found inside a .zip file, the .zip file will need to be decompressed in order for the tools  to operate properly.
 
-V0_03_00 - 08-22-2016
+New to Version 0_06_00:
+Added functions to reset and change ID Checks and Food Stamp Checks on PLUs.
 
-V0_04_00 - 08-24-2016
+Instructions for use:
+Place the entire 'export' from your POS in the folder called 'Put_XMLs_Here'.  If the folder doesn't exist, running the tool will automatically create it.  Once running the tool use option 1 to import the dataset into PC_Term.  Once imported, use option 5 to remove all product codes from the PLUs.  Use option 6 to reset ID Checks by department.  Use option 7 to remove all Food Stamp Checks (if needed).  Use option 8 to add Food Stamp Checks to the PLUs by department.  Once inside option 6 and option 8 you can enter 'dept' to check the department list that is inside your dataset to make sure you are using the right department.  Once you are finished use option 2 to export your dataset for use with your POS.
 
-V0_04_01 - 09-19-2016
+When you import the dataset into PC_Term, it also creates a backup of the original dataset in a folder called 'Backup_XMLs'.  When you export the dataset it places your export into a folder called 'Processed_XMLs'.  The dataset in the 'Processed_XML' folder is what you will use in your POS.
 
-V0_04_02 - 10-04-2016
+All processes add a log entry in a file called '!PC_Term Report.txt'
 
-V0_04_03 - 10-05-2016
+Please share and distribute as needed.  Any questions, problems, or concerns can be sent to David Ray.
 
-V0_05_00 - 10-08-2016
-
-V0_05_01 - 10-11-2016
-***	First fully successful version.
-***	Corrected a syntax error that allowed the process to work.
-
-V0_05_02 - 10-19-2016
-
-V0_05_03 - 10-19-2016
-
-V0_05_04 - 10-24-2016
-
-V0_05_05 - 10-28-2016
-
-V0_05_06 - 10-30-2016
-
-V0_05_07 - 11-02-2016
-
-V0.05.08 - 11-14-2016
-***	Added compatiblity for Python 3.5
-
-V0.05.09 - 11-15-2016
-***	Added logging function.
-
-V0.05.10 - 11-16-2016
-***	Updated conatact information.
-***	Corrected some syntax errors.
-
-V0.06.00F - 01-24-2017
-***	Added options to import and export data.
-***	Added options to reset all ID Checks and assign them by department ID.
-***	Added option to list all departments.
-***	ID CHECK RESETS DO NOT WORK
-
-V0.06.00G - 02-02-2017
-***	Added option to remove all food stamp checks
-***	Added option to add and reset all food stamp checks
-***	FOOD STAMP CHANGES DO NOT WORK
-
-V0.06.00H - 02-05-2017
-***	Corrected issues with ID Check resets and changing Food Stamp Checks.
+Thank you.
