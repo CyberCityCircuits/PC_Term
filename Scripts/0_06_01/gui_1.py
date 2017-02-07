@@ -4,16 +4,12 @@ Created on Mon Feb  6 19:24:54 2017
 
 @author: admin
 """
-import var
+import tasks, PC_Term, process, var
 
 
 import os
 import datetime as dt
-from time import sleep
 from shutil import copyfile
-from shutil import rmtree as rm_dir
-from pathlib import Path
-
 
 from tkinter import *
 from tkinter import Menu, Frame, BOTH
@@ -109,33 +105,18 @@ def copy(fn1,fn2):
     if os.path.isfile(fn1):
         copyfile(fn1,fn2)
     else:
-        msg_error("Error: File Does Not Exist.")
-        
-#delete a directory
-def delete_dir(dir_name):
-    if os.path.exists(dir_name):
-        rm_dir(dir_name)
-    else:
-        msg("Error: Directory Doesn't Exist")
-        
-#delete file
-def delete_file(file_name):
-    if os.path.isfile(file_name):
-        os.remove(file_name)
-    else:
-        msg_error("Error: File Doe Not Exit")    
+        print ("File Doesn't Exit")
         
 def msg(text):
     messagebox.showinfo(app_name, text)
     
-def msg_error(text):
-    messagebox.showerror(app_name, text)
-    
 def import_xml():
     global export_complete
     export_complete = 0
-    mk_dir(var.dir_temp)
+    mk_dir("TEMP")
     
+    mk_log()
+   
     #set current date/time for directory name purposes
     set_date_time()
 
@@ -148,20 +129,16 @@ def import_xml():
        if file.endswith(".xml"):
            copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
            copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
-           #text = Label(Window, text=(file.ljust(35) + " Imported"))
-           #text.pack()
-           pause(.03)
-    msg("Import Complete")
-    #text.gui.pack()
-    pause(2)
+           text = Label(Window, text=(file.ljust(35) + " Imported"))
+           text.pack()
+           tasks.pause(.03)
+           
     
-#set wait command
-def pause(value):
-    if value == 0:   #if 0 is entered it creates a press any key prompt.
-        os.system("pause")
-    elif int(value):
-        sleep(value)
-
+    text = Label(Window, text="IMPORT COMPLETE")
+    text.gui.pack()
+    tasks.pause(2)
+    
+    
 
 #make directories as needed
 def mk_dir(dir_name):
@@ -185,11 +162,7 @@ def set_date_time():
     currdate = dt.date.today().strftime("%Y%m%d")
     currtime = dt.datetime.now().strftime("%H%M%S")
 
-#checks if file exists in var.dir_temp
-def chk_file_temp(file_name):
-    if not Path(var.dir_temp + "/" + file_name).is_file():
-        msg_error("Error: File Not Found. \n ")
-        
+    
     
 root = Tk()
 root.geometry("400x300")

@@ -13,7 +13,7 @@ import lxml.etree as et
 from bs4 import BeautifulSoup as bs
 import re
 
-import tasks, var, process, gui
+import tasks, var, process
 
 #set varibles
 application = "PC_Term"
@@ -42,11 +42,22 @@ currtime = dt.datetime.now().strftime("%H%M%S")
 x = 0
 
 #set console size and color
-#os.system("mode con: cols=" + str(var.width) + " lines=" + str(var.lines))
-#os.system("color F")
-#os.system("cls")
-#os.system("echo off")
+os.system("mode con: cols=" + str(var.width) + " lines=" + str(var.lines))
+os.system("color F")
+os.system("cls")
+os.system("echo off")
 
+#define menu titles
+menu_00 = "0 - Exit"
+menu_01 = "1 - Import Backup from " + var.dir_fresh
+menu_02 = "2 - Save data to " + var.dir_clean
+menu_03 = "3 - List All Departments" 
+menu_04 = "4 - Function Not Supported"
+menu_05 = "5 - Remove Product Codes from PLU file"
+menu_06 = "6 - Reset All ID Checks"
+menu_07 = "7 - Remove All Food Stamp Checks"
+menu_08 = "8 - Set All Food Stamp Checks"
+menu_09 = "9 - Check Store Backup"
 
 #define commands
        
@@ -71,12 +82,13 @@ def chk_store_backup():
     print()
     print()
     if var_not_found == 1:
-        text = gui.Label(gui.Window,text = "If any files are not found. \n Please move your store backup XMLs to \n the directory named " + var.dir_fresh)
-        text.gui.pack()
-        
+        print (("If any files are not found.").center(cent_width))
+        print (("Please move your store backup XMLs to").center(cent_width))
+        print (("the directory named " + var.dir_fresh).center(cent_width))
+
     print()
     tasks.pause(0)
-    
+    main_menu()
         
 #delete a directory
 def delete_dir(dir_name):
@@ -101,8 +113,8 @@ def end():
         if option.lower() == ("y") or option.lower() == ("yes"):
             export_complete = 1
             end()
-   
-            
+        else:
+            main_menu()
             
     print ()
     print ("...Program Ending...".center(cent_width))
@@ -124,7 +136,7 @@ def export_xml():
 
     #create var.dir_clean
     dir_put = (var.dir_clean + "-" + currdate + "-" + currtime)
-    tasks.mk_dir(dir_put)
+    mk_dir(dir_put)
     
     #copy files from var.dir_fresh to var.dir_temp
     for file in os.listdir(var.dir_temp):
@@ -140,7 +152,7 @@ def export_xml():
     print()
     print("EXPORT COMPLETE".center(cent_width))
     tasks.pause(2)
-    
+    main_menu()
 
        
 def funct_not_supp():
@@ -151,7 +163,7 @@ def funct_not_supp():
     print ()
     print ()
     tasks.pause(var.wait)
-    
+    main_menu()
 
     
 #Headers
@@ -175,22 +187,20 @@ def import_xml():
 
     #create backup directory
     dir_bu = (var.dir_dirty + "-" + currdate + "-" + currtime)
-    tasks.mk_dir(dir_bu)
+    mk_dir(dir_bu)
     
     #copy files from var.dir_fresh to var.dir_temp
     for file in os.listdir(var.dir_fresh):
        if file.endswith(".xml"):
            copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
            copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
-           text = gui.Label(gui.Window, text=(file.ljust(35) + " Imported"))
-           text.gui.pack()
+           print ((file.ljust(35) + " Imported").center(cent_width))
            tasks.pause(.03)
            
-    
-    text = gui.Label(gui.Window, text="IMPORT COMPLETE")
-    text.gui.pack()
+    print()
+    print("IMPORT COMPLETE".center(cent_width))
     tasks.pause(2)
-    
+    main_menu()
        
 def list_dept():
     
@@ -251,14 +261,71 @@ def logo():
     print ("The corrected XML files are being put in".center(cent_width))
     print (("a folder valled \"" + var.dir_clean + "\".").center(cent_width))
 
+#main menu
+def main_menu():
+    global dept_food_stamps, dept_tobacco_id, dept_alcohol_id
     
-
-
-
+    header()
+    print ()
+    print ()
+    print ("  " + menu_00)
+    print()
+    print ("  " + menu_01)
+    print()
+    print ("  " + menu_02)
+    print()
+    print ("  " + menu_03)
+    print()
+    print ("  " + menu_04)
+    print()
+    print ("  " + menu_05)
+    print()
+    print ("  " + menu_06)
+    print()
+    print ("  " + menu_07)
+    print()
+    print ("  " + menu_08)
+    print()
+    print ("  " + menu_09)
+    print()
+    
+    option = input("  Enter Your Selection: ")
+    if option == ("0"):
+        end()
+    elif option == ("1"):
+        import_xml()
+    elif option == ("2"):
+        export_xml()
+    elif option == ("3"):
+        list_dept()
+        main_menu()
+    elif option == ("4"):
+        funct_not_supp()
+    elif option == ("5"):
+        run_pc_term()
+    elif option == ("6"):
+        dept_alcohol_id = []
+        dept_tobacco_id = []    
+        reset_idchecks()
+    elif option == ("7"):
+        process.remove_fs()
+    elif option == ("8"):
+        dept_food_stamps = []
+        set_food_stamps()
+    elif option == ("9"):
+        chk_store_backup()
+    else:
+        main_menu()    
+    
+#make directories as needed
+def mk_dir(dir_name):
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
         
 #make var.dir_temp if needed
 def mk_dir_temp():
-    tasks.mk_dir(var.dir_temp)
+    if not os.path.exists(var.dir_temp):
+        mk_dir(var.dir_temp)
     f = open(var.dir_temp + "\\" + "!!!READ_ME_FIRST" + ".txt","w")
     f.write(long_app + " V" + version + "\n")
     f.write("\n")
@@ -428,7 +495,7 @@ def run_pc_term():
     print ()
     export_complete = 0
     tasks.pause(2)    
-        
+    main_menu()    
 
     
 def set_date_time():
@@ -491,7 +558,7 @@ def set_food_stamps():
                 header()
                 print ("Food Stamp Flags Have Been Added".center(cent_width))
                 tasks.pause(2)
-                
+                main_menu()
             else:
                 set_food_stamps()
            
@@ -681,7 +748,7 @@ def set_alcohol_ID():
                 header()
                 print ("ID Checks Have Been Added".center(cent_width))
                 tasks.pause(2)
-                
+                main_menu()
             else:
                 set_alcohol_ID()
            
@@ -731,5 +798,5 @@ if __name__ == "__main__":
     logo()
     tasks.pause(var.wait)
     
-    
+    main_menu()
     

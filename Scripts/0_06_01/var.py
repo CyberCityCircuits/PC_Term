@@ -5,6 +5,10 @@ Created on Sun Feb  5 22:18:13 2017
 @author: admin
 """
 
+
+app_name = "Product Code Terminator"
+version = "0_06_01"
+
 dir_fresh = "Put_XMLs_Here"
 dir_clean = "Processed_XMLs"
 dir_dirty = "BackUp_XMLs"

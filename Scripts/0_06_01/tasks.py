@@ -36,6 +36,11 @@ def delete_file(file_name):
     else:
         print ("File Doesn't Exit")
         
+#make directories as needed
+def mk_dir(dir_name):
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+        
 #set date and time        
 def set_date_time():
     global currdate, currtime
