@@ -7,7 +7,7 @@ Created on Sun Feb  5 22:14:01 2017
 
 import var
 
-import os,
+import os, re
 import datetime as dt
 from time import sleep
 from shutil import copyfile
@@ -16,7 +16,8 @@ from pathlib import Path
 from bs4 import BeautifulSoup as bs
 import lxml.etree as et
 
-from tkinter import messagebox
+from tkinter import *
+from tkinter import messagebox, Label
 
 
 #set varibles
@@ -105,6 +106,65 @@ def export_xml():
         
     else:
         msg_error("T06: Export Error\nFile Not Found. \n ")   
+
+        
+def list_dept():
+    
+    #file_temp_merch = Path(dir_temp + "\\" + "poscfg.xml")
+    if not Path(var.dir_temp + "/poscfg.xml").is_file():
+        msg_error("T07: Check Error\n'poscfg.xml' Not Found. \n ")   
+    else:
+    
+        #x = 0
+        dept_list = []
+        
+        
+        tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
+        root = tree.getroot()
+        
+        for dept in root.iter('department'):
+            attributes = (dept.attrib)
+            sysid = (attributes["sysid"])
+            name = (attributes["name"])
+            
+            #print ((sysid.rjust(4)) + " - " + name.ljust(20))
+            #sleep(.02)
+            #x += 1
+            #if x == (lines-7) or x == ((lines-7)*2) or x == ((lines-7)*3):
+            dept = (sysid.rjust(4) + " " + name.ljust(20))
+            dept_list.append(dept)
+            #dept_list.append(name)
+        
+        
+        dept_list_temp = dept_list
+        #dept_list_len = len(dept_list)
+        iterable = range(len(dept_list))
+        
+        
+        dept_list_final = dept_list_temp
+        
+        x=0
+        for item in iterable:
+           x += 1
+           if (x % 2 == 0): #even
+               add_item = (dept_list.pop(0) + "    " + dept_list.pop(0))
+               dept_list_final.append(add_item)       
+        dept_list = '\n'.join(dept_list_final)
+        #dept_list.insert(0, "List of Departments\n")
+        msg(dept_list)
+        
+        #dept_list[0].grid(row=0, column=0)
+        #dept_list[1].grid(row=0, column=1)
+        #dept_list[2].grid(row=1, column=0)
+        #dept_list[3].grid(row=1, column=1)
+        
+        #for r in range(3):
+        #    for c in range(4):
+        #        Label(root, text='R%s/C%s'%(r,c),
+        #            borderwidth=1 ).grid(row=r,column=c)
+
+                    
+
         
 def msg(text):
     messagebox.showinfo(var.app_name, text)
