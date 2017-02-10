@@ -95,7 +95,71 @@ def show_about():
     msg(long_app + " V" + version + "\nBuild: " + build_date + "\n\nBy David Ray \nwww.DREAM-Enterprise.com")
     
 root = Tk()
-root.geometry("400x300")
+root.geometry("400x600")
+
+
+
+
+
+
+
+if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
+    msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
+
+else:
+    tasks.mk_dir(var.dir_temp)
+    tasks.mk_log()
+    
+    #set current date/time for directory name purposes
+    tasks.set_date_time()
+
+    #create backup directory
+    dir_bu = (var.dir_dirty + "-" + tasks.currdate + "-" + tasks.currtime)
+    tasks.mk_dir(dir_bu)
+    
+    #copy files from var.dir_fresh to var.dir_temp
+    for file in os.listdir(var.dir_fresh):
+       if file.endswith(".xml"):
+           tasks.copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
+           tasks.copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
+           #text = Label(Window, text=(file.ljust(35) + " Imported"))
+           #text.pack()
+           #pause(.03)
+    msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
+
+    if not Path(var.dir_temp + "/poscfg.xml").is_file():
+        msg_error("T07: Check Error\n'poscfg.xml' Not Found. \n ")   
+    else:
+    
+        #x = 0
+        dept_list = []
+        
+        
+        tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
+        root_xml = tree.getroot()
+        
+        for dept in root_xml.iter('department'):
+            attributes = (dept.attrib)
+            sysid = (attributes["sysid"])
+            name = (attributes["name"])
+            
+            #print ((sysid.rjust(4)) + " - " + name.ljust(20))
+            #sleep(.02)
+            #x += 1
+            #if x == (lines-7) or x == ((lines-7)*2) or x == ((lines-7)*3):
+            dept = (sysid.rjust(4) + " " + name.ljust(20))
+            dept_list.append(dept)
+
+        msg("Processing Departments")
+
+
+    row = 1
+    for i, txt in enumerate(dept_list):
+        l = Label(root, text=txt)
+        col = 0 if i%2 == 0 else 1
+        l.grid(row=row, column=col)
+        if col == 1:
+            row += 1
 
 '''
 #global export_complete

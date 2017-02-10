@@ -23,6 +23,9 @@ from tkinter import messagebox, Label
 #set varibles
 export_complete = 1
 
+currdate = dt.date.today().strftime("%Y%m%d")
+currtime = dt.datetime.now().strftime("%H%M%S")
+
     
 #checks if file exists in var.dir_temp
 def chk_file_temp(file_name):
@@ -137,6 +140,13 @@ def list_dept():
         
         
         dept_list_temp = dept_list
+        
+        with open("list_dept.txt", "w") as log:
+            for item in dept_list:
+                
+                log.write(item.strip() + ", ")
+        log.close()
+        
         #dept_list_len = len(dept_list)
         iterable = range(len(dept_list))
         
