@@ -7,10 +7,8 @@ Created on Sun Feb  5 22:18:13 2017
 
 app_name = "PC_Term"
 long_app = "Product Code Terminator"
-version = "0_06_01A"
-build_date = "02-09-2017"
-
-
+version = "0_06_01D"
+build_date = "02-12-2017"
 
 dir_fresh = "Put_XMLs_Here"
 dir_clean = "Processed_XMLs"
@@ -31,9 +29,11 @@ export_complete = 1
 dept_tobacco_id = []
 dept_alcohol_id = []
 dept_food_stamps = []
-full_dept_list = []
+dept_list = []
 
-
+fs_count = 0
+tobacco_id_count = 0
+alcohol_id_count = 0
 
 #define system varibles
 wait = 3.0

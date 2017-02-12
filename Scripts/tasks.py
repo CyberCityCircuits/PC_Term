@@ -16,8 +16,9 @@ from pathlib import Path
 from bs4 import BeautifulSoup as bs
 import lxml.etree as et
 
-from tkinter import *
-from tkinter import messagebox, Label, Tk
+#from tkinter import *
+from tkinter import messagebox, Label
+from tkinter import simpledialog
 
 
 
@@ -196,7 +197,8 @@ def remove_fs():
     if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
         msg_error("T08: Check Error\nFile Not Found. \n ")   
     else:
-        msg("This Will Take Several Moments.\n\nPlease Be Patient.")
+        msg("Removing All Food Stamp Checks.\n\n"
+            "This Will Take Several Moments.\n\nPlease Be Patient.")
         set_date_time()
         infile  = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
         outfile = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
@@ -321,7 +323,7 @@ def write_flags(dept, value):
         xmlin_dept = plu.department.get_text().strip()
         
         #CHECK TO SEE IF DEPT MATCHES.
-        if xmlin_dept.lstrip("0") == dept.lstrip("0"):
+        if xmlin_dept.lstrip("0") == str(dept).lstrip("0"):
             new_tag = soup.new_tag("flags")
             if not plu.find('flags'):
                 plu.append(new_tag)
@@ -348,9 +350,11 @@ def write_flags(dept, value):
     f.write("\n")
     f.close()   
 
-    msg(str(x) + " Food Stamp flags added to Department " + str(dept))
+    #msg(str(x) + " Food Stamp flags added to Department " + str(dept))
         
-        
+    var.fs_count += x    
+    
+    
 def write_id_chk(dept, value):
     x = 0
     infile  = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
@@ -361,25 +365,24 @@ def write_id_chk(dept, value):
     elif value == 2:
         idchk_value = ('domain:idCheck sysid="2"')
     else:
-        msg_error("There Was a Major Error.\n\nPlease Send The PC_Term_Report\nTo David Ray.")
+        msg_error("There Was a Major Error.\n\n"
+                  "Please Send The PC_Term_Report\nTo David Ray.")
         
-    set_date_time()
-    
-    f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
-    f.write("Error writing ID checks. " + currdate + " " + currtime + "\n")
-    
-    f.write("Location - process_write_id_chk\n")
-    f.write("Department - " + str(dept) + "\n")
-    f.write("Value - " + str(value) + "\n")
-    f.write("\n")
-    f.close()   
-    
+        set_date_time()
+        f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
+        f.write("Error writing ID checks. " + currdate + " " + currtime + "\n")
+        f.write("Location - process_write_id_chk\n")
+        f.write("Department - " + str(dept) + "\n")
+        f.write("Value - " + str(value) + "\n")
+        f.write("\n")
+        f.close()   
+        
     with open(infile) as xmlin:
         soup = bs(xmlin, 'xml')
     
     for department in soup.find_all('department'):
         xmlin_dept = department.get_text().strip()
-        if xmlin_dept.lstrip("0") == dept.lstrip("0"):
+        if xmlin_dept.lstrip("0") == str(dept).lstrip("0"):
             x+=1
             
             new_tag = soup.new_tag("idChecks")
@@ -403,6 +406,320 @@ def write_id_chk(dept, value):
     f.write("\n")
     f.close()   
 
+    if value == 1:
+        var.alcohol_id_count += x
+    elif value == 2:
+        var.tobacco_id_count += x
+    
+    
+#remove all id checks
+def remove_idchecks():
+    global export_complete
+
+    export_complete = 0
+    if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
+        msg_error("T10: Check Error\nFile Not Found. \n ")   
+    else:
+        x = 0
+        file_idchk = (var.dir_temp + "/" + var.plu_xml)
+        tree = et.parse(file_idchk)
+        root = tree.getroot()
+        tobacco = (0)
+        alcohol = (0)
+    
+        for c in root:
+            idchk = c.find('idChecks')    
+            if idchk:
+                if (c.find('idChecks')[0].attrib['sysid']) == str(2):
+                    #idchk_text = ("TOBACCO ID")
+                    tobacco += 1
+                elif (c.find('idChecks')[0].attrib['sysid']) == str(1):
+                    #idchk_text = ("ALCOHOL ID")
+                    alcohol += 1
+            x += 1
+                
+        msg("Tobacco ID Checks: " + str(tobacco) + "\n"
+            "Alcohol ID Checks: " + str(alcohol) + "\n\n"
+            "PLUs Checked: " + str(x) + "\n\n"
+            "All ID Checks will be removed.\n"
+            "Please wait while your file is being processed.\n"
+            "Please be patient.")
+        
+        infile  = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
+        outfile = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
+    
+        
+        with open(infile) as xmlin:
+            soup = bs(xmlin, 'xml')
+    
+            global id_checks
+            for tag in soup('idChecks'):
+                tag.decompose()
+        
+        xmlin.close()
+    
+        new_data = str(soup)
+        plu_new = open(outfile,"w")
+        plu_new.write(new_data)
+        plu_new.close() 
+           
+        set_date_time()
+        f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
+        f.write("Remove ID Checks - " + currdate + " - " + currtime + "\n")
+        f.write("There were " + str(tobacco) + " Tobacco ID Checks.\n")
+        f.write("There were " + str(alcohol) + " Alcohol ID Checks.\n")
+        f.write("PLUs Checked: " + str(x) + "\n")
+        f.write("\n")
+        f.close()
+        
+        msg("All ID Checks Have Been Removed.")
 
         
+#Set Tobacco ID Checks    
+def set_tobacco_ID():
+    if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
+        msg_error("T11: Check Error\nFile Not Found. \n ")   
+    else:
+        tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
+        root = tree.getroot()
+        
+        full_dept_list = []
+        for dept in root.iter('department'):
+            attributes = (dept.attrib)
+            sysid = (attributes["sysid"])
+            full_dept_list.append(sysid)
+         
+        #msg(var.dept_list)
+            
+        var.dept_tobacco_id.sort()
+        add_id = simpledialog.askinteger("Tobacco ID Checks", 
+             "ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
+             "Enter '0' to End.\n"
+             "What Department Would You Like to Add?")
+           
+        #0 Completes Input Process
+        if add_id == 0:
+            msg("Please Confirm: " + str(var.dept_tobacco_id))
+            for dept in var.dept_tobacco_id:
+                msg("Writing ID Checks to Department " + str(dept) + "\n"
+                    "Please Be Patient.")
+                write_id_chk(int(dept), 2)
+                
+            msg("Tobacco ID Checks Have Been Added")
+         
+        #check add_id against the existing entries
+        elif (var.dept_tobacco_id).count(add_id):
+            msg_error("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
+                      "Item Already On List")
+            set_tobacco_ID()
+            
+        #check add_id against a list of known departments    
+        elif not (var.dept_list).count(str(add_id)):
+            msg_error("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
+                      "You Have Entered an Invalid Department.")
+            set_tobacco_ID()
+            
+        else:
+            var.dept_tobacco_id.append(add_id)
+            
+            set_tobacco_ID()
+        
 
+#Set alcohol ID Checks    
+def set_alcohol_ID():
+    if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
+        msg_error("T12: Check Error\nFile Not Found. \n ")   
+    else:
+        tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
+        root = tree.getroot()
+        
+        full_dept_list = []
+        for dept in root.iter('department'):
+            attributes = (dept.attrib)
+            sysid = (attributes["sysid"])
+            full_dept_list.append(sysid)
+         
+        #msg(var.dept_list)
+            
+        var.dept_alcohol_id.sort()
+        add_id = simpledialog.askinteger("Alcohol ID Checks", 
+             "ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
+             "Enter '0' to End.\n"
+             "What Department Would You Like to Add?")
+           
+        #0 Completes Input Process
+        if add_id == 0:
+            msg("Please Confirm: " + str(var.dept_alcohol_id))
+            for dept in var.dept_alcohol_id:
+                msg("Writing ID Checks to Department " + str(dept) + "\n"
+                    "Please Be Patient.")
+                write_id_chk(int(dept), 1)
+                
+            msg("Alcohol ID Checks Have Been Added")
+         
+        #check add_id against the existing entries
+        elif (var.dept_alcohol_id).count(add_id):
+            msg_error("ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
+                      "Item Already On List")
+            set_alcohol_ID()
+            
+        #check add_id against a list of known departments    
+        elif not (var.dept_list).count(str(add_id)):
+            msg_error("ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
+                      "You Have Entered an Invalid Department.")
+            set_alcohol_ID()
+            
+        else:
+            var.dept_alcohol_id.append(add_id)
+            
+            set_alcohol_ID()
+
+
+#Set alcohol ID Checks    
+def set_food_stamps():
+    if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
+        msg_error("T13: Check Error\nFile Not Found. \n ")   
+    else:
+        tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
+        root = tree.getroot()
+        
+        full_dept_list = []
+        for dept in root.iter('department'):
+            attributes = (dept.attrib)
+            sysid = (attributes["sysid"])
+            full_dept_list.append(sysid)
+         
+        #msg(var.dept_list)
+            
+        var.dept_food_stamps.sort()
+        add_id = simpledialog.askinteger("Food Stamp Checks", 
+             "ID Set To:" + str(var.dept_food_stamps) + "\n\n"
+             "Enter '0' to End.\n"
+             "What Department Would You Like to Add?")
+           
+        #0 Completes Input Process
+        if add_id == 0:
+            msg("Please Confirm: " + str(var.dept_food_stamps))
+            for dept in var.dept_food_stamps:
+                msg("Writing Food Stamp Checks to Department " + str(dept) + "\n"
+                    "Please Be Patient.")
+                write_flags(int(dept), 4)
+                
+            msg("Food Stamp Checks Have Been Added")
+         
+        #check add_id against the existing entries
+        elif (var.dept_food_stamps).count(add_id):
+            msg_error("ID Set To:" + str(var.dept_food_stamps) + "\n\n"
+                      "Item Already On List")
+            set_food_stamps()
+
+        #check add_id against a list of known departments    
+        elif not (var.dept_list).count(str(add_id)):
+            msg_error("ID Set To:" + str(var.dept_food_stamps) + "\n\n"
+                      "You Have Entered an Invalid Department.")
+            set_food_stamps()
+            
+        else:
+            var.dept_food_stamps.append(add_id)
+            
+            set_food_stamps()
+
+
+'''            
+def set_food_stamps():
+    chk_file_temp(plu_xml)
+    chk_file_temp("poscfg.xml")
+    
+    tree = et.parse(dir_temp + "//" + "poscfg.xml")
+    root = tree.getroot()
+    
+    full_dept_list = []
+    for dept in root.iter('department'):
+        attributes = (dept.attrib)
+        sysid = (attributes["sysid"])
+        full_dept_list.append(sysid)
+            
+    dept_food_stamps.sort()
+    header()
+    print ("  ID Set To:" + str(dept_food_stamps))
+    print()
+    print ("  Enter 'dept' For a List of Departments.")
+    print ("  Enter 0 When Done.")
+    #print (str(full_dept_list))
+    add_id = input("  Choose A Department To Add Food Stamps: ")
+    
+    add_id_val_chk = add_id.isdigit()
+    
+    if add_id_val_chk:
+        #if length is greater than 4 characters it is invalid
+        if len(add_id) > 4:
+            header()
+            print ("  ID Set To:" + str(dept_food_stamps))
+            print()
+            print ("  Invalid Entry.")
+            sleep(1)
+            set_food_stamps()
+            
+        #0 Completes Input Process
+        elif add_id == "0":
+            header()
+            print("   Please Confirm: " + str(dept_food_stamps))
+            print ()
+            option = input("  Is This Correct? [Y/N]")
+            if option.lower( )== ("y"):
+                print ()
+                for dept in dept_food_stamps:
+                    print ("  Processing Department " + str(dept))
+                    sleep(.5)
+                for dept in dept_food_stamps:
+                    print ("  Adding to Department " + str(dept))
+                    
+                    sleep(.01)
+                    process_write_flags(dept, 4)
+                
+                sleep(2)
+                header()
+                print ("Food Stamp Flags Have Been Added".center(cent_width))
+                sleep(2)
+                main_menu()
+            else:
+                set_food_stamps()
+           
+        else:
+            #check add_id against the existing entries
+            if dept_food_stamps.count(add_id):
+                header()
+                print ("  ID Set To:" + str(dept_food_stamps))
+                print ()
+                print ("  Item Already in List.")
+                sleep(1)
+                set_food_stamps()
+            #check add_id against a list of known departments    
+            elif not full_dept_list.count(add_id):
+                header()
+                print ("  ID Set To:" + str(dept_food_stamps))
+                print ()
+                print ("  You Have Entered an Invalid Department.")
+                sleep(1)
+                set_food_stamps()
+                
+            else:
+                dept_food_stamps.append(add_id)
+                
+                set_food_stamps()
+                
+    else:
+        #list departments for reference
+        if add_id.lower() == "dept":
+            list_dept()
+            set_food_stamps()
+        else:
+            header()
+            print ("  ID Set To:" + str(dept_food_stamps))
+            print()
+            print ("  Invalid Entry.")
+            sleep(1)
+            set_food_stamps()
+
+    set_food_stamps()
+''' 

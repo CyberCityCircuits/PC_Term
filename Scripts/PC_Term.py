@@ -10,10 +10,10 @@ import var, tasks
 import os, sys
 import datetime as dt
 from pathlib import Path
-from bs4 import BeautifulSoup as bs
+#from bs4 import BeautifulSoup as bs
 import lxml.etree as et
 
-from tkinter import *
+#from tkinter import *
 from tkinter import Menu, Frame, BOTH, W
 from tkinter import Tk, Label, messagebox
 
@@ -70,15 +70,13 @@ class Window(Frame):
         
         plu_menu.add_command(label="Remove Product Codes", command=tasks.run_pc_term)
         plu_menu.add_command(label="Remove Food Stamp Checks", command=tasks.remove_fs)
-        plu_menu.add_command(label="Reset ID Checks by Department")
-        plu_menu.add_command(label="Set Food Stamp Checks by Department")
+        plu_menu.add_command(label="Reset ID Checks by Department", command=reset_idchks)
+        plu_menu.add_command(label="Set Food Stamp Checks by Department", command=set_fs)
         topbar.add_cascade(label="Edit PLUs", menu=plu_menu)
         
-        help_menu.add_command(label="Directions")
+        help_menu.add_command(label="Directions", command=funct_not_supp)
         help_menu.add_command(label="About", command=show_about)
         topbar.add_cascade(label="Help", menu=help_menu)
-        
-        
         
         
         
@@ -89,9 +87,12 @@ def import_data():
     tasks.import_xml()
     show_dept()
     
+def funct_not_supp():
+    msg_error("Function Not Yet Supported")
+    
 def show_dept():
     if not Path(var.dir_temp + "/poscfg.xml").is_file():
-        msg_error("T07: Check Error\n'poscfg.xml' Not Found. \n ")   
+        msg_error("P01: Check Error\n'poscfg.xml' Not Found. \n ")   
     else:
     
         dept_list = []
@@ -108,71 +109,46 @@ def show_dept():
             dept_list.append(sysid)
             dept_list.append(name)
 
-        msg("Processing Departments")
-
+        #msg("Processing Departments")
         
         for i, txt in enumerate(dept_list):
             l = Label(root, text=txt)
             row, col = divmod(i, 4)
             l.grid(row=row+1, column=col, sticky=W)
+            
+        var.dept_list = dept_list
         
 def msg(text):
     messagebox.showinfo(app_name, text)
     
 def msg_error(text):
     messagebox.showerror(app_name, text)
-   
-def show_about():
-    msg(long_app + " V" + version + "\nBuild: " + build_date + "\n\nBy David Ray \nwww.DREAM-Enterprise.com")
 
-    '''
-def import_xml():
-    
-    if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
-        msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
-    
+def reset_idchks():
+    if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
+        msg_error("T09: Check Error\nFile Not Found. \n ")   
     else:
-        tasks.mk_dir(var.dir_temp)
-        tasks.mk_log()
-        
-        tasks.set_date_time()
-    
-        dir_bu = (var.dir_dirty + "-" + tasks.currdate + "-" + tasks.currtime)
-        tasks.mk_dir(dir_bu)
-        
-        for file in os.listdir(var.dir_fresh):
-           if file.endswith(".xml"):
-               tasks.copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
-               tasks.copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
-        msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
-    
-        if not Path(var.dir_temp + "/poscfg.xml").is_file():
-            msg_error("T07: Check Error\n'poscfg.xml' Not Found. \n ")   
-        else:
-        
-            dept_list = []
+        var.tobacco_id_count = 0
+        var.alcohol_id_count = 0
+        tasks.remove_idchecks()
+        tasks.set_tobacco_ID()
+        tasks.set_alcohol_ID()
+        msg("All ID Checks Have Been Reset:"
+            "\n\n" + str(var.tobacco_id_count) + " Tobacco ID Checks Have Been Added"
+            "\n" + str(var.alcohol_id_count) + " Alcohol ID Checks Have Been Added")
             
-            
-            tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
-            root_xml = tree.getroot()
-            
-            for dept in root_xml.iter('department'):
-                attributes = (dept.attrib)
-                sysid = (attributes["sysid"])
-                name = (attributes["name"])
-                
-                dept_list.append(sysid)
-                dept_list.append(name)
-    
-            msg("Processing Departments")
-    
-            
-            for i, txt in enumerate(dept_list):
-                l = Label(root, text=txt)
-                row, col = divmod(i, 4)
-                l.grid(row=row+1, column=col)
 
-                '''
+def set_fs():
+    var.fs_count = 0
+    tasks.set_food_stamps()
+    msg(str(var.fs_count) +  " Food Stamp Checks Have Been Added")        
+        
+def show_about():
+    msg(long_app + " V" + version + "\n"
+        "Build: " + build_date + "\n\n"
+        "By David Ray \n"
+        "\n" + var.email + "\n\n"
+        "www.DREAM-Enterprise.com")
                 
 root = Tk()
 
