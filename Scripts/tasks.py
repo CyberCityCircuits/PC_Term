@@ -17,7 +17,8 @@ from bs4 import BeautifulSoup as bs
 import lxml.etree as et
 
 from tkinter import *
-from tkinter import messagebox, Label
+from tkinter import messagebox, Label, Tk
+
 
 
 #set varibles
@@ -25,6 +26,7 @@ export_complete = 1
 
 currdate = dt.date.today().strftime("%Y%m%d")
 currtime = dt.datetime.now().strftime("%H%M%S")
+
 
     
 #checks if file exists in var.dir_temp
@@ -55,7 +57,7 @@ def delete_file(file_name):
     else:
         msg_error("T02: Delete Error\nFile Doesn't Exit")
 
-        
+'''
 def import_xml():
     global export_complete
     export_complete = 0
@@ -84,6 +86,8 @@ def import_xml():
                #pause(.03)
         msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
         
+'''
+        
 def export_xml():
     global export_complete
     if Path(var.dir_temp + "/" + var.plu_xml).is_file():
@@ -111,72 +115,26 @@ def export_xml():
         msg_error("T06: Export Error\nFile Not Found. \n ")   
 
         
-def list_dept():
+def import_xml():
     
-    #file_temp_merch = Path(dir_temp + "\\" + "poscfg.xml")
-    if not Path(var.dir_temp + "/poscfg.xml").is_file():
-        msg_error("T07: Check Error\n'poscfg.xml' Not Found. \n ")   
+    if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
+        msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
+    
     else:
+        mk_dir(var.dir_temp)
+        mk_log()
+        
+        set_date_time()
     
-        #x = 0
-        dept_list = []
+        dir_bu = (var.dir_dirty + "-" + currdate + "-" + currtime)
+        mk_dir(dir_bu)
         
-        
-        tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
-        root = tree.getroot()
-        
-        for dept in root.iter('department'):
-            attributes = (dept.attrib)
-            sysid = (attributes["sysid"])
-            name = (attributes["name"])
-            
-            #print ((sysid.rjust(4)) + " - " + name.ljust(20))
-            #sleep(.02)
-            #x += 1
-            #if x == (lines-7) or x == ((lines-7)*2) or x == ((lines-7)*3):
-            #dept = (sysid.rjust(4) + " " + name.ljust(20))
-            #dept_list.append(dept)
-            dept_list.append(sysid)
-            dept_list.append(name)
-        
-        
-        dept_list_temp = dept_list
-        
-        with open("list_dept.txt", "w") as log:
-            for item in dept_list:
-                
-                log.write("'" + item.strip() + "', ")
-        log.close()
-        
-        #dept_list_len = len(dept_list)
-        iterable = range(len(dept_list))
-        
-        
-        dept_list_final = dept_list_temp
-        
-        x=0
-        for item in iterable:
-           x += 1
-           if (x % 4 == 0): #even
-               add_item = ((dept_list.pop(0).rjust(4) + "    " + dept_list.pop(0).ljust(15)).ljust(20)
-                   + "   " + (dept_list.pop(0).rjust(4) + "    " + dept_list.pop(0).ljust(15)).rjust(30))
-               dept_list_final.append(add_item)       
-        dept_list = '\n'.join(dept_list_final)
-        #dept_list.insert(0, "List of Departments\n")
-        msg(dept_list)
-        
-        #dept_list[0].grid(row=0, column=0)
-        #dept_list[1].grid(row=0, column=1)
-        #dept_list[2].grid(row=1, column=0)
-        #dept_list[3].grid(row=1, column=1)
-        
-        #for r in range(3):
-        #    for c in range(4):
-        #        Label(root, text='R%s/C%s'%(r,c),
-        #            borderwidth=1 ).grid(row=r,column=c)
-
-                    
-
+        for file in os.listdir(var.dir_fresh):
+           if file.endswith(".xml"):
+               copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
+               copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
+        msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
+   
         
 def msg(text):
     messagebox.showinfo(var.app_name, text)

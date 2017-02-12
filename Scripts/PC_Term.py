@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup as bs
 import lxml.etree as et
 
 from tkinter import *
-from tkinter import Menu, Frame, BOTH
+from tkinter import Menu, Frame, BOTH, W
 from tkinter import Tk, Label, messagebox
 
 
@@ -62,9 +62,9 @@ class Window(Frame):
         plu_menu = Menu(topbar)
         help_menu = Menu(topbar)
         
-        file_menu.add_command(label="Import Dataset", command=tasks.import_xml)
+        file_menu.add_command(label="Import Dataset", command=import_data)
         file_menu.add_command(label="Export Dataset", command=tasks.export_xml)
-        file_menu.add_command(label="List All Departments", command=tasks.list_dept)
+        #file_menu.add_command(label="List All Departments", command=tasks.list_dept)
         file_menu.add_command(label="Exit", command=client_exit)
         topbar.add_cascade(label="File", menu=file_menu)
         
@@ -84,54 +84,16 @@ class Window(Frame):
         
 def client_exit():
     sys.exit() 
-        
-def msg(text):
-    messagebox.showinfo(app_name, text)
     
-def msg_error(text):
-    messagebox.showerror(app_name, text)
-   
-def show_about():
-    msg(long_app + " V" + version + "\nBuild: " + build_date + "\n\nBy David Ray \nwww.DREAM-Enterprise.com")
+def import_data():
+    tasks.import_xml()
+    show_dept()
     
-root = Tk()
-root.geometry("400x600")
-
-
-
-
-
-
-
-if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
-    msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
-
-else:
-    tasks.mk_dir(var.dir_temp)
-    tasks.mk_log()
-    
-    #set current date/time for directory name purposes
-    tasks.set_date_time()
-
-    #create backup directory
-    dir_bu = (var.dir_dirty + "-" + tasks.currdate + "-" + tasks.currtime)
-    tasks.mk_dir(dir_bu)
-    
-    #copy files from var.dir_fresh to var.dir_temp
-    for file in os.listdir(var.dir_fresh):
-       if file.endswith(".xml"):
-           tasks.copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
-           tasks.copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
-           #text = Label(Window, text=(file.ljust(35) + " Imported"))
-           #text.pack()
-           #pause(.03)
-    msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
-
+def show_dept():
     if not Path(var.dir_temp + "/poscfg.xml").is_file():
         msg_error("T07: Check Error\n'poscfg.xml' Not Found. \n ")   
     else:
     
-        #x = 0
         dept_list = []
         
         
@@ -143,10 +105,6 @@ else:
             sysid = (attributes["sysid"])
             name = (attributes["name"])
             
-            #print ((sysid.rjust(4)) + " - " + name.ljust(20))
-            #sleep(.02)
-            #x += 1
-            #if x == (lines-7) or x == ((lines-7)*2) or x == ((lines-7)*3):
             dept_list.append(sysid)
             dept_list.append(name)
 
@@ -156,104 +114,87 @@ else:
         for i, txt in enumerate(dept_list):
             l = Label(root, text=txt)
             row, col = divmod(i, 4)
-            l.grid(row=row+1, column=col)
+            l.grid(row=row+1, column=col, sticky=W)
         
+def msg(text):
+    messagebox.showinfo(app_name, text)
+    
+def msg_error(text):
+    messagebox.showerror(app_name, text)
+   
+def show_about():
+    msg(long_app + " V" + version + "\nBuild: " + build_date + "\n\nBy David Ray \nwww.DREAM-Enterprise.com")
+
+    '''
+def import_xml():
+    
+    if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
+        msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
+    
+    else:
+        tasks.mk_dir(var.dir_temp)
+        tasks.mk_log()
         
-#    row = 1
-#    for i, txt in enumerate(dept_list):
-#        l = Label(root, text=txt)
-#        col = 0 if i%4 == 0 else 1
-#        l.grid(row=row, column=col)
-#        if col == 1:
-#            row += 1
-
-'''
-#global export_complete
-export_complete = 0
-
-if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
-    msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
-
-else:
-    tasks.mk_dir(var.dir_temp)
-    tasks.mk_log()
+        tasks.set_date_time()
     
-    #set current date/time for directory name purposes
-    tasks.set_date_time()
-
-    #create backup directory
-    dir_bu = (var.dir_dirty + "-" + tasks.currdate + "-" + tasks.currtime)
-    tasks.mk_dir(dir_bu)
-    
-    #copy files from var.dir_fresh to var.dir_temp
-    for file in os.listdir(var.dir_fresh):
-       if file.endswith(".xml"):
-           tasks.copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
-           tasks.copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
-           #text = Label(Window, text=(file.ljust(35) + " Imported"))
-           #text.pack()
-           #pause(.03)
-    msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
-
-
-#file_temp_merch = Path(dir_temp + "\\" + "poscfg.xml")
-if not Path(var.dir_temp + "/poscfg.xml").is_file():
-    msg_error("T07: Check Error\n'poscfg.xml' Not Found. \n ")   
-else:
-
-    #x = 0
-    dept_list = []
-    
-    
-    tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
-    root = tree.getroot()
-    
-    for dept in root.iter('department'):
-        attributes = (dept.attrib)
-        sysid = (attributes["sysid"])
-        name = (attributes["name"])
+        dir_bu = (var.dir_dirty + "-" + tasks.currdate + "-" + tasks.currtime)
+        tasks.mk_dir(dir_bu)
         
-        #print ((sysid.rjust(4)) + " - " + name.ljust(20))
-        #sleep(.02)
-        #x += 1
-        #if x == (lines-7) or x == ((lines-7)*2) or x == ((lines-7)*3):
-        dept = (sysid.rjust(4) + " " + name.ljust(20))
-        dept_list.append(dept)
-        #dept_list.append(name)
+        for file in os.listdir(var.dir_fresh):
+           if file.endswith(".xml"):
+               tasks.copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
+               tasks.copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
+        msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
     
-    #dept_list.insert(0, "List of Departments")
-    #dept_list_temp = dept_list
-    dept_list_len = len(dept_list)
-    #iterable = range(len(dept_list))
-    
-    
-    #dept_list_final = dept_list_temp
-    
-    #x=0
-    #for item in iterable:
-    #   x += 1
-    #   if (x % 2 == 0): #even
-    #       add_item = (dept_list.pop(0) + "    " + dept_list.pop(0))
-    #       dept_list_final.append(add_item)       
-    #dept_list = '\n'.join(dept_list_final)
-    #dept_list[0].grid(row=0, column=0)
-    #dept_list[1].grid(row=0, column=1)
-    #dept_list[2].grid(row=1, column=0)
-    #dept_list[3].grid(row=1, column=1)
-
-    x = dept_list_len
-    if not (x % 2 == 0):#odd
-        x+=1
-    
-    r = x / 2
+        if not Path(var.dir_temp + "/poscfg.xml").is_file():
+            msg_error("T07: Check Error\n'poscfg.xml' Not Found. \n ")   
+        else:
         
-for rows in range(4):
-    for columns in range(2):
-        Label(root, text=(dept_list.pop(0))(rows,columns),
-            borderwidth=1 ).grid(row=rows,column=columns)
-'''
+            dept_list = []
+            
+            
+            tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
+            root_xml = tree.getroot()
+            
+            for dept in root_xml.iter('department'):
+                attributes = (dept.attrib)
+                sysid = (attributes["sysid"])
+                name = (attributes["name"])
+                
+                dept_list.append(sysid)
+                dept_list.append(name)
+    
+            msg("Processing Departments")
+    
+            
+            for i, txt in enumerate(dept_list):
+                l = Label(root, text=txt)
+                row, col = divmod(i, 4)
+                l.grid(row=row+1, column=col)
 
+                '''
+                
+root = Tk()
+
+w = 300 # width for the Tk root
+h = 600 #height for the Tk root
+
+# get screen width and height
+ws = root.winfo_screenwidth() # width of the screen
+hs = root.winfo_screenheight() # height of the screen
+
+# calculate x and y coordinates for the Tk root window
+x = (ws/4) - (w/2)
+y = (hs/2.5) - (h/2)
+
+# set the dimensions of the screen 
+# and where it is placed
+root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+                
 app = Window(root)    
+
+import_data()
 
 root.mainloop()
 
