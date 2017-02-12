@@ -134,9 +134,10 @@ def list_dept():
             #sleep(.02)
             #x += 1
             #if x == (lines-7) or x == ((lines-7)*2) or x == ((lines-7)*3):
-            dept = (sysid.rjust(4) + " " + name.ljust(20))
-            dept_list.append(dept)
-            #dept_list.append(name)
+            #dept = (sysid.rjust(4) + " " + name.ljust(20))
+            #dept_list.append(dept)
+            dept_list.append(sysid)
+            dept_list.append(name)
         
         
         dept_list_temp = dept_list
@@ -144,7 +145,7 @@ def list_dept():
         with open("list_dept.txt", "w") as log:
             for item in dept_list:
                 
-                log.write(item.strip() + ", ")
+                log.write("'" + item.strip() + "', ")
         log.close()
         
         #dept_list_len = len(dept_list)
@@ -156,8 +157,9 @@ def list_dept():
         x=0
         for item in iterable:
            x += 1
-           if (x % 2 == 0): #even
-               add_item = (dept_list.pop(0) + "    " + dept_list.pop(0))
+           if (x % 4 == 0): #even
+               add_item = ((dept_list.pop(0).rjust(4) + "    " + dept_list.pop(0).ljust(15)).ljust(20)
+                   + "   " + (dept_list.pop(0).rjust(4) + "    " + dept_list.pop(0).ljust(15)).rjust(30))
                dept_list_final.append(add_item)       
         dept_list = '\n'.join(dept_list_final)
         #dept_list.insert(0, "List of Departments\n")

@@ -147,19 +147,25 @@ else:
             #sleep(.02)
             #x += 1
             #if x == (lines-7) or x == ((lines-7)*2) or x == ((lines-7)*3):
-            dept = (sysid.rjust(4) + " " + name.ljust(20))
-            dept_list.append(dept)
+            dept_list.append(sysid)
+            dept_list.append(name)
 
         msg("Processing Departments")
 
-
-    row = 1
-    for i, txt in enumerate(dept_list):
-        l = Label(root, text=txt)
-        col = 0 if i%2 == 0 else 1
-        l.grid(row=row, column=col)
-        if col == 1:
-            row += 1
+        
+        for i, txt in enumerate(dept_list):
+            l = Label(root, text=txt)
+            row, col = divmod(i, 4)
+            l.grid(row=row+1, column=col)
+        
+        
+#    row = 1
+#    for i, txt in enumerate(dept_list):
+#        l = Label(root, text=txt)
+#        col = 0 if i%4 == 0 else 1
+#        l.grid(row=row, column=col)
+#        if col == 1:
+#            row += 1
 
 '''
 #global export_complete
