@@ -23,7 +23,7 @@ from tkinter import simpledialog
 
 
 #set varibles
-export_complete = 1
+var.export_complete = 1
 
 currdate = dt.date.today().strftime("%Y%m%d")
 currtime = dt.datetime.now().strftime("%H%M%S")
@@ -38,8 +38,18 @@ def chk_file_temp(file_name):
         
 
 def client_exit():
-    
-    sys.exit() 
+    if var.export_complete == 0:
+        option = messagebox.askquestion("Exit", "You Haven't Exported Your "
+                                        "Dataset.\nExiting Now Will Discard "
+                                        "All Changes.\n\nDo You Want To Exit "
+                                        "Anyways?", icon="question")
+        if option =="yes":
+            delete_dir(var.dir_temp)
+            sys.exit()
+        
+    elif var.export_complete == 1:
+        delete_dir(var.dir_temp)
+        sys.exit()
 
 
 #copy files
@@ -66,8 +76,8 @@ def delete_file(file_name):
 
 '''
 def import_xml():
-    global export_complete
-    export_complete = 0
+    global var.export_complete
+    var.export_complete = 0
     
     if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
         msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
@@ -96,7 +106,7 @@ def import_xml():
 '''
         
 def export_xml():
-    global export_complete
+    
     if Path(var.dir_temp + "/" + var.plu_xml).is_file():
             
         #set current date/time for directory name purposes
@@ -115,7 +125,7 @@ def export_xml():
         copy(var.dir_temp + "\\" + var.log_name + ".txt", dir_put + "\\" + 
              var.log_name + ".txt")
                
-        export_complete = 1
+        var.export_complete = 1
                           
         msg("Export Complete\n\nYour Export Is In a Folder\nnamed " + 
             var.dir_clean)
@@ -241,7 +251,7 @@ def remove_fs():
 
     
 def run_pc_term():
-    global export_complete
+    
 
     #check is PLU file is in dir_temp
     if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
@@ -297,7 +307,7 @@ def run_pc_term():
             " Sapphire's SMS Configuration Manager to\n"
             "ensure you have all of the PLUs.")
         
-        export_complete = 0
+        var.export_complete = 0
             
     
 
@@ -432,9 +442,9 @@ def write_id_chk(dept, value):
     
 #remove all id checks
 def remove_idchecks():
-    global export_complete
+    
 
-    export_complete = 0
+    var.export_complete = 0
     if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
         msg_error("T10: Check Error\nFile Not Found. \n ")   
     else:

@@ -33,7 +33,7 @@ currtime = dt.datetime.now().strftime("%H%M%S")
 x = 0
 
 
-export_complete = 1
+var.export_complete = 1
 
 class Window(Frame):
     def __init__(self, master = None):
