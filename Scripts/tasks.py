@@ -7,7 +7,7 @@ Created on Sun Feb  5 22:14:01 2017
 
 import var
 
-import os, re
+import os, re, sys
 import datetime as dt
 from time import sleep
 from shutil import copyfile
@@ -34,6 +34,12 @@ currtime = dt.datetime.now().strftime("%H%M%S")
 def chk_file_temp(file_name):
     if not Path(var.dir_temp + "/" + file_name).is_file():
         msg_error("T04: Check Error\nFile Not Found. \n ")   
+        
+        
+
+def client_exit():
+    
+    sys.exit() 
 
 
 #copy files
@@ -106,11 +112,13 @@ def export_xml():
                copy(var.dir_temp + "/" + file, dir_put + "/" + file)
                    
         set_date_time()
-        copy(var.dir_temp + "\\" + var.log_name + ".txt", dir_put + "\\" + var.log_name + ".txt")
+        copy(var.dir_temp + "\\" + var.log_name + ".txt", dir_put + "\\" + 
+             var.log_name + ".txt")
                
         export_complete = 1
                           
-        msg("Export Complete\n\nYour Export Is In a Folder\nnamed " + var.dir_clean)
+        msg("Export Complete\n\nYour Export Is In a Folder\nnamed " + 
+            var.dir_clean)
         
     else:
         msg_error("T06: Export Error\nFile Not Found. \n ")   
@@ -119,7 +127,9 @@ def export_xml():
 def import_xml():
     
     if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
-        msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
+        msg_error("T05: Import Error\nFile Not Found.\n\n"
+                  "Please Place Your Dataset\nIn The Folder Named\n" + 
+                  var.dir_fresh)   
     
     else:
         mk_dir(var.dir_temp)
@@ -134,7 +144,8 @@ def import_xml():
            if file.endswith(".xml"):
                copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
                copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
-        msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
+        msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + 
+            var.dir_dirty)
    
         
 def msg(text):
@@ -183,7 +194,8 @@ def process_remove_pcode():
     root = tree.getroot()
     for xml_tag in root.iter(tag):
         xml_tag.text = str(pcode_value)
-    tree.write(var.dir_temp + "/" + var.plu_xml,encoding="UTF-8",xml_declaration=True)
+    tree.write(var.dir_temp + "/" + var.plu_xml,encoding="UTF-8",
+               xml_declaration=True)
     
     for c in root:
         x += 1
@@ -222,7 +234,8 @@ def remove_fs():
         f.write("\n")
         f.close()   
     
-        msg("All Food Stamp Tags Removed\n\nRemoved " + str(x) + " Food Stamp Tags")
+        msg("All Food Stamp Tags Removed\n\nRemoved " + str(x) + 
+            " Food Stamp Tags")
         
     
 
@@ -257,9 +270,13 @@ def run_pc_term():
             f.write("\n")
             f.write ("WARNING - WARNING - WARNING - WARNING - WARNING\n")
             f.write("\n")
-            f.write ("Your PLU count is lower than anticipated.  Please confirm that this number is accurate.\n")
+            f.write ("Your PLU count is lower than anticipated.  "
+                     "Please confirm that this number is accurate.\n")
             f.write("\n")
-            f.write ("This error can be caused by using the wrong version of SMS Import/Export.  Use the Sapphire's SMS Configuration Manager to ensure you have all of the PLUs.\n")
+            f.write ("This error can be caused by using the wrong "
+                     "version of SMS Import/Export.  Use the Sapphire's SMS"
+                     "Configuration Manager to ensure you have "
+                     "all of the PLUs.\n")
             f.write("\n")
             f.write ("WARNING - WARNING - WARNING - WARNING - WARNING\n")
         f.write ("\n")
@@ -301,7 +318,8 @@ def write_flags(dept, value):
         flag_value = ('domain:flag sysid="4"')
     else:
         #error logging
-        msg_error("There Was a Major Error.\n\nPlease Send The PC_Term_Report\nTo David Ray.")
+        msg_error("There Was a Major Error.\n\n"
+                  "Please Send The PC_Term_Report\nTo David Ray.")
         
         set_date_time()
         
@@ -313,7 +331,8 @@ def write_flags(dept, value):
         f.write("\n")
         f.close()   
     
-    #Process for actually checking if flag already exists and then adding it as needed.    
+    #Process for actually checking if flag already exists and then adding 
+    #it as needed.    
     with open(infile) as xmlin:
         soup = bs(xmlin, 'xml')
         new_tag = soup.new_tag("flags")
@@ -406,7 +425,7 @@ def write_id_chk(dept, value):
     f.close()   
 
     if value == 1:
-        var.tobacco_id_count += x
+        var.alcohol_id_count += x
     elif value == 2:
         var.tobacco_id_count += x
     
@@ -499,8 +518,8 @@ def set_tobacco_ID():
            
         #0 Completes Input Process
         if add_id == 0:
-            result = messagebox.askquestion("Confirm", 
-                                            "Please Confirm: " + str(var.dept_tobacco_id), 
+            result = messagebox.askquestion("Confirm", "Please Confirm: " + 
+                                            str(var.dept_tobacco_id), 
                                             icon="question")
             if result == "yes":
                 for dept in var.dept_tobacco_id:
@@ -535,8 +554,8 @@ def set_tobacco_ID():
             else:
                 #msg("Removing Department " + str(add_id))
                 var.dept_tobacco_id.remove(int(add_id))
-                msg("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
-                    "Department " + add_id + " Removed.")
+                #msg("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
+                #    "Department " + add_id + " Removed.")
                 set_tobacco_ID()
             
          
@@ -578,12 +597,13 @@ def set_alcohol_ID():
         add_id = simpledialog.askinteger("Alcohol ID Checks", 
              "ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
              "Enter '0' to End.\n"
+             "Use '-' to Remove an Entry.\n"
              "What Department Would You Like to Add?")
            
         #0 Completes Input Process
         if add_id == 0:
-            result = messagebox.askquestion("Confirm", 
-                                            "Please Confirm: " + str(var.dept_alcohol_id), 
+            result = messagebox.askquestion("Confirm", "Please Confirm: " + 
+                                            str(var.dept_alcohol_id), 
                                             icon="question")
             if result == "yes":
                 for dept in var.dept_alcohol_id:
@@ -617,8 +637,8 @@ def set_alcohol_ID():
             else:
                 #msg("Removing Department " + str(add_id))
                 var.dept_alcohol_id.remove(int(add_id))
-                msg("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
-                    "Department " + add_id + " Removed.")
+                #msg("ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
+                #    "Department " + add_id + " Removed.")
                 set_alcohol_ID()
             
              
@@ -660,17 +680,51 @@ def set_food_stamps():
         add_id = simpledialog.askinteger("Food Stamp Checks", 
              "ID Set To:" + str(var.dept_food_stamps) + "\n\n"
              "Enter '0' to End.\n"
+             "Use '-' to Remove an Entry.\n"
              "What Department Would You Like to Add?")
            
         #0 Completes Input Process
         if add_id == 0:
-            msg("Please Confirm: " + str(var.dept_food_stamps))
-            for dept in var.dept_food_stamps:
-                msg("Writing Food Stamp Checks to Department " + str(dept) + "\n"
-                    "Please Be Patient.")
-                write_flags(int(dept), 4)
+            result = messagebox.askquestion("Confirm", "Please Confirm: " + 
+                                            str(var.dept_food_stamps), 
+                                            icon="question")
+            if result == "yes":
+                for dept in var.dept_food_stamps:
+                    msg("Writing ID Checks to Department " + str(dept) + "\n"
+                        "Please Be Patient.")
+                    write_flags(int(dept), 4)
+                    
+                msg("Food Stamp Checks Have Been Added")
+            else:
+                set_food_stamps()
                 
-            msg("Food Stamp Checks Have Been Added")
+        #Remove Entry From Department List                
+        elif int(add_id) < 0:
+            
+            #msg("Remove Dept" + str(add_id))
+            
+            add_id = str(abs(add_id))
+            
+            #msg("This Should Be Absolute Value" + str(add_id))
+            
+            if not (var.dept_list).count(str(add_id)):
+                msg_error("ID Set To:" + str(var.dept_food_stamps) + "\n\n"
+                          "T14 - You Have Entered an Invalid Department.")
+                set_food_stamps()
+          
+            elif not (var.dept_food_stamps).count(int(add_id)):
+                msg_error("ID Set To:" + str(var.dept_food_stamps) + "\n\n"
+                          "T15 - You Have Entered an Invalid Department.")
+                set_food_stamps()
+               
+            else:
+                #msg("Removing Department " + str(add_id))
+                var.dept_food_stamps.remove(int(add_id))
+                #msg("ID Set To:" + str(var.dept_food_stamps) + "\n\n"
+                #    "Department " + add_id + " Removed.")
+                set_food_stamps()
+            
+             
          
         #check add_id against the existing entries
         elif (var.dept_food_stamps).count(add_id):
@@ -689,102 +743,3 @@ def set_food_stamps():
             
             set_food_stamps()
 
-
-'''            
-def set_food_stamps():
-    chk_file_temp(plu_xml)
-    chk_file_temp("poscfg.xml")
-    
-    tree = et.parse(dir_temp + "//" + "poscfg.xml")
-    root = tree.getroot()
-    
-    full_dept_list = []
-    for dept in root.iter('department'):
-        attributes = (dept.attrib)
-        sysid = (attributes["sysid"])
-        full_dept_list.append(sysid)
-            
-    dept_food_stamps.sort()
-    header()
-    print ("  ID Set To:" + str(dept_food_stamps))
-    print()
-    print ("  Enter 'dept' For a List of Departments.")
-    print ("  Enter 0 When Done.")
-    #print (str(full_dept_list))
-    add_id = input("  Choose A Department To Add Food Stamps: ")
-    
-    add_id_val_chk = add_id.isdigit()
-    
-    if add_id_val_chk:
-        #if length is greater than 4 characters it is invalid
-        if len(add_id) > 4:
-            header()
-            print ("  ID Set To:" + str(dept_food_stamps))
-            print()
-            print ("  Invalid Entry.")
-            sleep(1)
-            set_food_stamps()
-            
-        #0 Completes Input Process
-        elif add_id == "0":
-            header()
-            print("   Please Confirm: " + str(dept_food_stamps))
-            print ()
-            option = input("  Is This Correct? [Y/N]")
-            if option.lower( )== ("y"):
-                print ()
-                for dept in dept_food_stamps:
-                    print ("  Processing Department " + str(dept))
-                    sleep(.5)
-                for dept in dept_food_stamps:
-                    print ("  Adding to Department " + str(dept))
-                    
-                    sleep(.01)
-                    process_write_flags(dept, 4)
-                
-                sleep(2)
-                header()
-                print ("Food Stamp Flags Have Been Added".center(cent_width))
-                sleep(2)
-                main_menu()
-            else:
-                set_food_stamps()
-           
-        else:
-            #check add_id against the existing entries
-            if dept_food_stamps.count(add_id):
-                header()
-                print ("  ID Set To:" + str(dept_food_stamps))
-                print ()
-                print ("  Item Already in List.")
-                sleep(1)
-                set_food_stamps()
-            #check add_id against a list of known departments    
-            elif not full_dept_list.count(add_id):
-                header()
-                print ("  ID Set To:" + str(dept_food_stamps))
-                print ()
-                print ("  You Have Entered an Invalid Department.")
-                sleep(1)
-                set_food_stamps()
-                
-            else:
-                dept_food_stamps.append(add_id)
-                
-                set_food_stamps()
-                
-    else:
-        #list departments for reference
-        if add_id.lower() == "dept":
-            list_dept()
-            set_food_stamps()
-        else:
-            header()
-            print ("  ID Set To:" + str(dept_food_stamps))
-            print()
-            print ("  Invalid Entry.")
-            sleep(1)
-            set_food_stamps()
-
-    set_food_stamps()
-''' 

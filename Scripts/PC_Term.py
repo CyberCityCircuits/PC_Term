@@ -65,7 +65,7 @@ class Window(Frame):
         file_menu.add_command(label="Import Dataset", command=import_data)
         file_menu.add_command(label="Export Dataset", command=tasks.export_xml)
         #file_menu.add_command(label="List All Departments", command=tasks.list_dept)
-        file_menu.add_command(label="Exit", command=client_exit)
+        file_menu.add_command(label="Exit", command=tasks.client_exit)
         topbar.add_cascade(label="File", menu=file_menu)
         
         plu_menu.add_command(label="Remove Product Codes", command=tasks.run_pc_term)
@@ -80,8 +80,6 @@ class Window(Frame):
         
         
         
-def client_exit():
-    sys.exit() 
     
 def import_data():
     tasks.import_xml()
@@ -94,7 +92,7 @@ def show_dept():
     if not Path(var.dir_temp + "/poscfg.xml").is_file():
         msg_error("P01: Check Error\n'poscfg.xml' Not Found. \n ")   
     else:
-    
+
         dept_list = []
         
         
@@ -139,8 +137,8 @@ def reset_idchks():
             "\n\n" + str(var.tobacco_id_count) + " Tobacco ID Checks Have Been Added"
             "\n" + str(var.alcohol_id_count) + " Alcohol ID Checks Have Been Added")
             
-
 def set_fs():
+    var.dept_food_stamps = []
     var.fs_count = 0
     tasks.set_food_stamps()
     msg(str(var.fs_count) +  " Food Stamp Checks Have Been Added")        
@@ -169,7 +167,8 @@ y = (hs/2.5) - (h/2)
 # and where it is placed
 root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
-                
+
+    
 app = Window(root)    
 
 import_data()
