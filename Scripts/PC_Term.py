@@ -128,6 +128,8 @@ def reset_idchks():
     if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
         msg_error("T09: Check Error\nFile Not Found. \n ")   
     else:
+        var.dept_alcohol_id = []
+        var.dept_tobacco_id = []
         var.tobacco_id_count = 0
         var.alcohol_id_count = 0
         tasks.remove_idchecks()

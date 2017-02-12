@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain:currencyConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01"><site>AB123</site><currencies><currency sysid="1" name="DOLLAR" symbol="$" amount="1.000000"/></currencies></domain:currencyConfig>

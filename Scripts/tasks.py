@@ -143,7 +143,6 @@ def msg(text):
 def msg_error(text):
     messagebox.showerror(var.app_name, text)
     
-    
 #set wait command
 def pause(value):
     if value == 0:   #if 0 is entered it creates a press any key prompt.
@@ -407,7 +406,7 @@ def write_id_chk(dept, value):
     f.close()   
 
     if value == 1:
-        var.alcohol_id_count += x
+        var.tobacco_id_count += x
     elif value == 2:
         var.tobacco_id_count += x
     
@@ -495,17 +494,51 @@ def set_tobacco_ID():
         add_id = simpledialog.askinteger("Tobacco ID Checks", 
              "ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
              "Enter '0' to End.\n"
+             "Use '-' to Remove an Entry.\n"
              "What Department Would You Like to Add?")
            
         #0 Completes Input Process
         if add_id == 0:
-            msg("Please Confirm: " + str(var.dept_tobacco_id))
-            for dept in var.dept_tobacco_id:
-                msg("Writing ID Checks to Department " + str(dept) + "\n"
-                    "Please Be Patient.")
-                write_id_chk(int(dept), 2)
-                
-            msg("Tobacco ID Checks Have Been Added")
+            result = messagebox.askquestion("Confirm", 
+                                            "Please Confirm: " + str(var.dept_tobacco_id), 
+                                            icon="question")
+            if result == "yes":
+                for dept in var.dept_tobacco_id:
+                    msg("Writing ID Checks to Department " + str(dept) + "\n"
+                        "Please Be Patient.")
+                    write_id_chk(int(dept), 2)
+                    
+                msg("Tobacco ID Checks Have Been Added")
+            else:
+                set_tobacco_ID()
+
+
+        #Remove Entry From Department List                
+        elif int(add_id) < 0:
+            
+            #msg("Remove Dept" + str(add_id))
+            
+            add_id = str(abs(add_id))
+            
+            #msg("This Should Be Absolute Value" + str(add_id))
+            
+            if not (var.dept_list).count(str(add_id)):
+                msg_error("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
+                          "T14 - You Have Entered an Invalid Department.")
+                set_tobacco_ID()
+          
+            elif not (var.dept_tobacco_id).count(int(add_id)):
+                msg_error("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
+                          "T15 - You Have Entered an Invalid Department.")
+                set_tobacco_ID()
+               
+            else:
+                #msg("Removing Department " + str(add_id))
+                var.dept_tobacco_id.remove(int(add_id))
+                msg("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
+                    "Department " + add_id + " Removed.")
+                set_tobacco_ID()
+            
          
         #check add_id against the existing entries
         elif (var.dept_tobacco_id).count(add_id):
@@ -549,14 +582,46 @@ def set_alcohol_ID():
            
         #0 Completes Input Process
         if add_id == 0:
-            msg("Please Confirm: " + str(var.dept_alcohol_id))
-            for dept in var.dept_alcohol_id:
-                msg("Writing ID Checks to Department " + str(dept) + "\n"
-                    "Please Be Patient.")
-                write_id_chk(int(dept), 1)
+            result = messagebox.askquestion("Confirm", 
+                                            "Please Confirm: " + str(var.dept_alcohol_id), 
+                                            icon="question")
+            if result == "yes":
+                for dept in var.dept_alcohol_id:
+                    msg("Writing ID Checks to Department " + str(dept) + "\n"
+                        "Please Be Patient.")
+                    write_id_chk(int(dept), 1)
+                    
+                msg("Alcohol ID Checks Have Been Added")
+            else:
+                set_alcohol_ID()
                 
-            msg("Alcohol ID Checks Have Been Added")
-         
+        #Remove Entry From Department List                
+        elif int(add_id) < 0:
+            
+            #msg("Remove Dept" + str(add_id))
+            
+            add_id = str(abs(add_id))
+            
+            #msg("This Should Be Absolute Value" + str(add_id))
+            
+            if not (var.dept_list).count(str(add_id)):
+                msg_error("ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
+                          "T14 - You Have Entered an Invalid Department.")
+                set_alcohol_ID()
+          
+            elif not (var.dept_alcohol_id).count(int(add_id)):
+                msg_error("ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
+                          "T15 - You Have Entered an Invalid Department.")
+                set_alcohol_ID()
+               
+            else:
+                #msg("Removing Department " + str(add_id))
+                var.dept_alcohol_id.remove(int(add_id))
+                msg("ID Set To:" + str(var.dept_tobacco_id) + "\n\n"
+                    "Department " + add_id + " Removed.")
+                set_alcohol_ID()
+            
+             
         #check add_id against the existing entries
         elif (var.dept_alcohol_id).count(add_id):
             msg_error("ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
