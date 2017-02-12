@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2006 rel. 3 U (http://www.altova.com) by Linda Toth (VeriFone, Inc.) -->
+<domain:groups xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01">
+	<group>
+		<name>Manager</name>
+		<reportName>Summary</reportName>
+		<reportName>PLU</reportName>
+		<reportName>Department</reportName>
+		<reportName>Category</reportName>
+		<reportName>Tax</reportName>
+		<reportName>Hourly</reportName>
+		<reportName>Safe Drop</reportName>
+		<reportName>Merchandise Sales</reportName>
+		<reportName>Customer Counts</reportName>
+		<reportName>Cashier Trans Indicators</reportName>
+		<reportName>Cashier Fuel Indicators</reportName>
+		<reportName>Card Type Product Report</reportName>
+		<reportName>Quick Count</reportName>
+	</group>
+	<group>
+		<name>Fuel</name>
+		<reportName>Fuel Service Level/ Price Level</reportName>
+		<reportName>Fuel Product/ Price Level</reportName>
+		<reportName>Fuel Tier/ Product</reportName>
+		<reportName>Fuel Tank</reportName>
+		<reportName>Fuel Autocollect</reportName>
+		<reportName>Fueling Position/ Product (Hose)</reportName>
+		<reportName>Fueling Position/ Product (Hose) Running</reportName>
+		<reportName>Fuel Dispenser</reportName>
+		<reportName>Fuel DCR Statistics</reportName>
+		<reportName>Fueling Position/ Product (Hose) Test</reportName>
+	</group>
+	<group>
+		<name>Period1</name>
+		<reportName>Summary By Register</reportName>
+		<reportName>PLU</reportName>
+		<reportName>Department</reportName>
+		<reportName>Category</reportName>
+		<reportName>Network</reportName>
+		<reportName>Network Totals</reportName>
+		<reportName>Fuel Tank</reportName>
+		<reportName>Fueling Position/ Product (Hose)</reportName>
+		<reportName>Fueling Position/ Product (Hose) Running</reportName>
+		<reportName>Fuel Dispenser</reportName>
+		<reportName>Blend Report</reportName>
+		<reportName>E-Safe Content Report</reportName>
+	</group>
+	<group>
+		<name>Period2</name>
+		<reportName>Summary By Register</reportName>
+		<reportName>PLU</reportName>
+		<reportName>Department</reportName>
+		<reportName>Category</reportName>
+		<reportName>Network</reportName>
+		<reportName>Network Totals</reportName>
+		<reportName>Fuel Tank</reportName>
+		<reportName>Fueling Position/ Product (Hose)</reportName>
+		<reportName>Fueling Position/ Product (Hose) Running</reportName>
+		<reportName>Fuel Dispenser</reportName>
+		<reportName>Blend Report</reportName>
+		<reportName>Carwash Pay Point</reportName>
+		<reportName>E-Safe End Of Day Report</reportName>
+		<reportName>E-Safe Content Report</reportName>
+		<reportName>Loyalty Report</reportName>
+	</group>
+	<group>
+		<name>Period3</name>
+		<reportName>Summary By Register</reportName>
+		<reportName>PLU</reportName>
+		<reportName>Department</reportName>
+		<reportName>Category</reportName>
+		<reportName>Network</reportName>
+		<reportName>Network Totals</reportName>
+		<reportName>Fuel Tank</reportName>
+		<reportName>Fueling Position/ Product (Hose)</reportName>
+		<reportName>Fueling Position/ Product (Hose) Running</reportName>
+	</group>
+	<group>
+		<name>Period4</name>
+		<reportName>Summary By Register</reportName>
+		<reportName>PLU</reportName>
+		<reportName>Department</reportName>
+		<reportName>Category</reportName>
+		<reportName>Network</reportName>
+		<reportName>Network Totals</reportName>
+		<reportName>Fuel Tank</reportName>
+		<reportName>Fueling Position/ Product (Hose)</reportName>
+		<reportName>Fueling Position/ Product (Hose) Running</reportName>
+	</group>
+	<groupsMasterList>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Summary By Register</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">PLU</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Department</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Category</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Network</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Network Totals</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fuel Tank</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fueling Position/ Product (Hose)</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Fueling Position/ Product (Hose) Running</reportNameML>
+		<reportNameML Period1="true" Period2="true">Fuel Dispenser</reportNameML>
+		<reportNameML Period1="true" Period2="true">Blend Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Proprietary Network Card</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="true">Proprietary Network Product</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Tank Reconciliation Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="true" Period4="false">Tier Product Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Carwash Pay Point</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">E-Safe End Of Day Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">E-Safe Content Report</reportNameML>
+		<reportNameML Period1="true" Period2="true" Period3="false" Period4="false">Loyalty Report</reportNameML>
+	</groupsMasterList>
+</domain:groups>
