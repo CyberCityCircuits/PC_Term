@@ -21,7 +21,6 @@ from tkinter import messagebox, Label
 from tkinter import simpledialog
 
 
-
 #set varibles
 var.export_complete = 1
 
@@ -29,14 +28,12 @@ currdate = dt.date.today().strftime("%Y%m%d")
 currtime = dt.datetime.now().strftime("%H%M%S")
 
 
-    
 #checks if file exists in var.dir_temp
 def chk_file_temp(file_name):
     if not Path(var.dir_temp + "/" + file_name).is_file():
         msg_error("T04: Check Error\nFile Not Found. \n ")   
         
-        
-
+    
 def client_exit():
     if var.export_complete == 0:
         option = messagebox.askquestion("Exit", "You Haven't Exported Your "
@@ -58,7 +55,7 @@ def copy(fn1,fn2):
         copyfile(fn1,fn2)
     else:
         msg_error("T03: Copy Error\nFile Doesn't Exit")
-       
+    
         
 #delete a directory
 def delete_dir(dir_name):
@@ -66,6 +63,7 @@ def delete_dir(dir_name):
         rm_dir(dir_name)
     #else:
     #    msg_error("T01: Delete Error\nDirectory Doesn't Exist")
+    
         
 #delete file
 def delete_file(file_name):
@@ -74,39 +72,8 @@ def delete_file(file_name):
     else:
         msg_error("T02: Delete Error\nFile Doesn't Exit")
 
-'''
-def import_xml():
-    global var.export_complete
-    var.export_complete = 0
-    
-    if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
-        msg_error("T05: Import Error\nFile Not Found.\n\nPlease Place Your Dataset\nIn The Folder Named\n" + var.dir_fresh)   
-    
-    else:
-        mk_dir(var.dir_temp)
-        mk_log()
-        
-        #set current date/time for directory name purposes
-        set_date_time()
-    
-        #create backup directory
-        dir_bu = (var.dir_dirty + "-" + currdate + "-" + currtime)
-        mk_dir(dir_bu)
-        
-        #copy files from var.dir_fresh to var.dir_temp
-        for file in os.listdir(var.dir_fresh):
-           if file.endswith(".xml"):
-               copy(var.dir_fresh + "/" + file, var.dir_temp + "/" + file)
-               copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
-               #text = Label(Window, text=(file.ljust(35) + " Imported"))
-               #text.pack()
-               #pause(.03)
-        msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + var.dir_dirty)
-        
-'''
         
 def export_xml():
-    
     if Path(var.dir_temp + "/" + var.plu_xml).is_file():
             
         #set current date/time for directory name purposes
@@ -135,12 +102,10 @@ def export_xml():
 
         
 def import_xml():
-    
     if not Path(var.dir_fresh + "/" + var.plu_xml).is_file():
         msg_error("T05: Import Error\nFile Not Found.\n\n"
                   "Please Place Your Dataset\nIn The Folder Named\n" + 
                   var.dir_fresh)   
-    
     else:
         mk_dir(var.dir_temp)
         mk_log()
@@ -156,13 +121,33 @@ def import_xml():
                copy(var.dir_fresh + "/" + file, dir_bu + "/" + file)
         msg("Import Complete\n\nYour Back Up Is In a Folder\nNamed " + 
             var.dir_dirty)
-   
         
+        
+#make directories as needed
+def mk_dir(dir_name):
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
+        
+def mk_log():
+    #creates and writes to log file
+    f = open(var.dir_temp + "\\" + var.log_name + ".txt","w")
+    log_currdate = dt.date.today().strftime("%m/%d/%Y")
+    log_currtime = dt.datetime.now().strftime("%H:%M:%S")
+    f.write(var.long_app + " V" + var.version + "\n"
+            "Starting Date - " + log_currdate + "\n"
+            "Starting Time - " + log_currtime + "\n"
+            "\n")
+    f.close()    
+    
+    
 def msg(text):
-    messagebox.showinfo(var.app_name, text)
+    messagebox.showinfo(var.long_app, text)
+    
     
 def msg_error(text):
-    messagebox.showerror(var.app_name, text)
+    messagebox.showerror(var.long_app, text)
+
     
 #set wait command
 def pause(value):
@@ -171,30 +156,7 @@ def pause(value):
     elif int(value):
         sleep(value)
 
-
-#set date and time        
-def set_date_time():
-    global currdate, currtime
-    currdate = dt.date.today().strftime("%Y%m%d")
-    currtime = dt.datetime.now().strftime("%H%M%S")
         
-        
-#make directories as needed
-def mk_dir(dir_name):
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
-
-def mk_log():
-    #creates and writes to log file
-    f = open(var.dir_temp + "\\" + var.log_name + ".txt","w")
-    log_currdate = dt.date.today().strftime("%m/%d/%Y")
-    log_currtime = dt.datetime.now().strftime("%H:%M:%S")
-    f.write(var.long_app + " V" + var.version + "\n")
-    f.write("Starting Date - " + log_currdate + "\n")
-    f.write("Starting Time - " + log_currtime + "\n")
-    f.write("\n")
-    f.close()    
-
 #remove all product codes
 def process_remove_pcode():
     x=0
@@ -206,7 +168,6 @@ def process_remove_pcode():
         xml_tag.text = str(pcode_value)
     tree.write(var.dir_temp + "/" + var.plu_xml,encoding="UTF-8",
                xml_declaration=True)
-    
     for c in root:
         x += 1
         
@@ -248,11 +209,8 @@ def remove_fs():
             " Food Stamp Tags")
         
     
-
-    
 def run_pc_term():
     
-
     #check is PLU file is in dir_temp
     if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
         msg_error("T07: Check Error\nFile Not Found. \n ")   
@@ -311,139 +269,60 @@ def run_pc_term():
             
     
 
-def write_flags(dept, value):
-    infile  = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
-    outfile = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
+#set date and time        
+def set_date_time():
+    global currdate, currtime
+    currdate = dt.date.today().strftime("%Y%m%d")
+    currtime = dt.datetime.now().strftime("%H%M%S")
     
-    set_date_time()
-    
-    x=0
-    if value == 1:
-        flag_value = ('domain:flag sysid="1"')
-    elif value == 2:
-        flag_value = ('domain:flag sysid="2"')
-    elif value == 3:
-        flag_value = ('domain:flag sysid="3"')    
-    elif value == 4:
-        flag_value = ('domain:flag sysid="4"')
-    else:
-        #error logging
-        msg_error("There Was a Major Error.\n\n"
-                  "Please Send The PC_Term_Report\nTo David Ray.")
         
-        set_date_time()
+#Count PLUs, ID Checks, and Food Stamps.
+def survey_plus():
+    if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
+        msg_error("T16: Check Error\nPLUs File Not Found. \n ")   
+    else:
+        x = 0
+        file_idchk = (var.dir_temp + "/" + var.plu_xml)
+        tree = et.parse(file_idchk)
+        root = tree.getroot()
+        tobacco = (0)
+        alcohol = (0)
+        food_stamp = (0)
+        
+        #Count ID Checks
+        for c in root:
+            idchk = c.find('idChecks')    
+            flag = c.find('flags')    
+            if idchk:
+                if (c.find('idChecks')[0].attrib['sysid']) == str(2):
+                    #idchk_text = ("TOBACCO ID")
+                    tobacco += 1
+                elif (c.find('idChecks')[0].attrib['sysid']) == str(1):
+                    #idchk_text = ("ALCOHOL ID")
+                    alcohol += 1
+            if flag:
+                if (c.find('flags')[0].attrib['sysid']) == str(4):
+                    food_stamp += 1
+            x += 1
+                
+        msg("Tobacco ID Checks: " + str(tobacco) + "\n"
+            "Alcohol ID Checks: " + str(alcohol) + "\n"
+            "Food Stamp Checks: " + str(food_stamp) + "\n\n"
+            "PLUs Checked: " + str(x) + "\n\n")
         
         f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
-        f.write("Error writing flags. " + currdate + " " + currtime + "\n")
-        f.write("Location - process_write_flags\n")
-        f.write("Department - " + str(dept) + "\n")
-        f.write("Value - " + str(value) + "\n")
-        f.write("\n")
-        f.close()   
-    
-    #Process for actually checking if flag already exists and then adding 
-    #it as needed.    
-    with open(infile) as xmlin:
-        soup = bs(xmlin, 'xml')
-        new_tag = soup.new_tag("flags")
-        
-    for plu in soup.find_all('PLU'):
-        xmlin_dept = plu.department.get_text().strip()
-        
-        #CHECK TO SEE IF DEPT MATCHES.
-        if xmlin_dept.lstrip("0") == str(dept).lstrip("0"):
-            new_tag = soup.new_tag("flags")
-            if not plu.find('flags'):
-                plu.append(new_tag)
+        log_currdate = dt.date.today().strftime("%m/%d/%Y")
+        log_currtime = dt.datetime.now().strftime("%H:%M:%S")
+        f.write("Survey PLUs - " + log_currdate + " " + log_currtime + "\n"
+                "Tobacco ID Checks: " + str(tobacco) + "\n"
+                "Alcohol ID Checks: " + str(alcohol) + "\n"
+                "Food Stamp Checks: " + str(food_stamp) + "\n\n"
+                "PLUs Checked: " + str(x) + "\n\n")
+        f.close()    
 
-            if not plu.find('flag', attrs={'sysid': 4}):
-                new_tag = soup.new_tag(flag_value)
-                plu.flags.append(new_tag)
-
-                x += 1
-    
-    xmlin.close()
-    
-    new_data = str(soup)
-    plu_new = open(outfile,"w")
-    plu_new.write(new_data)
-    plu_new.close()
-    
-    
-    f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
-    f.write("Writing Food Stamps " + currdate + " " + currtime + "\n")
-    f.write("Department - " + str(dept) + "\n")
-    f.write("Value - " + str(value) + "\n")
-    f.write("Amount Added - " + str(x) + "\n")
-    f.write("\n")
-    f.close()   
-
-    #msg(str(x) + " Food Stamp flags added to Department " + str(dept))
         
-    var.fs_count += x    
-    
-    
-def write_id_chk(dept, value):
-    x = 0
-    infile  = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
-    outfile = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
-       
-    if value == 1:
-        idchk_value = ('domain:idCheck sysid="1"')
-    elif value == 2:
-        idchk_value = ('domain:idCheck sysid="2"')
-    else:
-        msg_error("There Was a Major Error.\n\n"
-                  "Please Send The PC_Term_Report\nTo David Ray.")
-        
-        set_date_time()
-        f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
-        f.write("Error writing ID checks. " + currdate + " " + currtime + "\n")
-        f.write("Location - process_write_id_chk\n")
-        f.write("Department - " + str(dept) + "\n")
-        f.write("Value - " + str(value) + "\n")
-        f.write("\n")
-        f.close()   
-        
-    with open(infile) as xmlin:
-        soup = bs(xmlin, 'xml')
-    
-    for department in soup.find_all('department'):
-        xmlin_dept = department.get_text().strip()
-        if xmlin_dept.lstrip("0") == str(dept).lstrip("0"):
-            x+=1
-            
-            new_tag = soup.new_tag("idChecks")
-            department.find_parent('PLU').append(new_tag)
-            department.find_parent('PLU').idChecks.append(soup.new_tag(idchk_value))
-            
-    xmlin.close()
-        
-    new_data = str(soup)
-    plu_new = open(outfile,"w")
-    plu_new.write(new_data)
-    plu_new.close()
-
-    set_date_time()
-    
-    f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
-    f.write("Writing ID Checks " + currdate + " " + currtime + "\n")
-    f.write("Department - " + str(dept) + "\n")
-    f.write("Value - " + str(value) + "\n")
-    f.write("Amount Added - " + str(x) + "\n")
-    f.write("\n")
-    f.close()   
-
-    if value == 1:
-        var.alcohol_id_count += x
-    elif value == 2:
-        var.tobacco_id_count += x
-    
-    
 #remove all id checks
 def remove_idchecks():
-    
-
     var.export_complete = 0
     if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
         msg_error("T10: Check Error\nFile Not Found. \n ")   
@@ -455,6 +334,7 @@ def remove_idchecks():
         tobacco = (0)
         alcohol = (0)
     
+        #Count ID Checks
         for c in root:
             idchk = c.find('idChecks')    
             if idchk:
@@ -600,8 +480,6 @@ def set_alcohol_ID():
             attributes = (dept.attrib)
             sysid = (attributes["sysid"])
             full_dept_list.append(sysid)
-         
-        #msg(var.dept_list)
             
         var.dept_alcohol_id.sort()
         add_id = simpledialog.askinteger("Alcohol ID Checks", 
@@ -628,12 +506,8 @@ def set_alcohol_ID():
         #Remove Entry From Department List                
         elif int(add_id) < 0:
             
-            #msg("Remove Dept" + str(add_id))
-            
             add_id = str(abs(add_id))
-            
-            #msg("This Should Be Absolute Value" + str(add_id))
-            
+                           
             if not (var.dept_list).count(str(add_id)):
                 msg_error("ID Set To:" + str(var.dept_alcohol_id) + "\n\n"
                           "T14 - You Have Entered an Invalid Department.")
@@ -683,9 +557,7 @@ def set_food_stamps():
             attributes = (dept.attrib)
             sysid = (attributes["sysid"])
             full_dept_list.append(sysid)
-         
-        #msg(var.dept_list)
-            
+                    
         var.dept_food_stamps.sort()
         add_id = simpledialog.askinteger("Food Stamp Checks", 
              "ID Set To:" + str(var.dept_food_stamps) + "\n\n"
@@ -710,13 +582,9 @@ def set_food_stamps():
                 
         #Remove Entry From Department List                
         elif int(add_id) < 0:
-            
-            #msg("Remove Dept" + str(add_id))
-            
+                       
             add_id = str(abs(add_id))
-            
-            #msg("This Should Be Absolute Value" + str(add_id))
-            
+                        
             if not (var.dept_list).count(str(add_id)):
                 msg_error("ID Set To:" + str(var.dept_food_stamps) + "\n\n"
                           "T14 - You Have Entered an Invalid Department.")
@@ -734,8 +602,6 @@ def set_food_stamps():
                 #    "Department " + add_id + " Removed.")
                 set_food_stamps()
             
-             
-         
         #check add_id against the existing entries
         elif (var.dept_food_stamps).count(add_id):
             msg_error("ID Set To:" + str(var.dept_food_stamps) + "\n\n"
@@ -750,6 +616,134 @@ def set_food_stamps():
             
         else:
             var.dept_food_stamps.append(add_id)
-            
             set_food_stamps()
 
+
+def write_flags(dept, value):
+    infile  = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
+    outfile = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
+    
+    set_date_time()
+    
+    x=0
+    if value == 1:
+        flag_value = ('domain:flag sysid="1"')
+    elif value == 2:
+        flag_value = ('domain:flag sysid="2"')
+    elif value == 3:
+        flag_value = ('domain:flag sysid="3"')    
+    elif value == 4:
+        flag_value = ('domain:flag sysid="4"')
+    else:
+        #error logging
+        msg_error("There Was a Major Error.\n\n"
+                  "Please Send The PC_Term_Report\nTo David Ray.")
+        
+        set_date_time()
+        
+        f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
+        f.write("Error writing flags. " + currdate + " " + currtime + "\n")
+        f.write("Location - process_write_flags\n")
+        f.write("Department - " + str(dept) + "\n")
+        f.write("Value - " + str(value) + "\n")
+        f.write("\n")
+        f.close()   
+    
+    #Process for actually checking if flag already exists and then adding 
+    #it as needed.    
+    with open(infile) as xmlin:
+        soup = bs(xmlin, 'xml')
+        new_tag = soup.new_tag("flags")
+        
+    for plu in soup.find_all('PLU'):
+        xmlin_dept = plu.department.get_text().strip()
+        
+        #CHECK TO SEE IF DEPT MATCHES.
+        if xmlin_dept.lstrip("0") == str(dept).lstrip("0"):
+            new_tag = soup.new_tag("flags")
+            if not plu.find('flags'):
+                plu.append(new_tag)
+
+            if not plu.find('flag', attrs={'sysid': 4}):
+                new_tag = soup.new_tag(flag_value)
+                plu.flags.append(new_tag)
+
+                x += 1
+    
+    xmlin.close()
+    
+    new_data = str(soup)
+    plu_new = open(outfile,"w")
+    plu_new.write(new_data)
+    plu_new.close()
+    
+    f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
+    f.write("Writing Food Stamps " + currdate + " " + currtime + "\n")
+    f.write("Department - " + str(dept) + "\n")
+    f.write("Value - " + str(value) + "\n")
+    f.write("Amount Added - " + str(x) + "\n")
+    f.write("\n")
+    f.close()   
+
+    #msg(str(x) + " Food Stamp flags added to Department " + str(dept))
+        
+    var.fs_count += x    
+    
+    
+def write_id_chk(dept, value):
+    x = 0
+    infile  = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
+    outfile = os.path.abspath(var.dir_temp + "/" + var.plu_xml)
+       
+    if value == 1:
+        idchk_value = ('domain:idCheck sysid="1"')
+    elif value == 2:
+        idchk_value = ('domain:idCheck sysid="2"')
+    else:
+        msg_error("There Was a Major Error.\n\n"
+                  "Please Send The PC_Term_Report\nTo David Ray.")
+        
+        set_date_time()
+        f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
+        f.write("Error writing ID checks. " + currdate + " " + currtime + "\n")
+        f.write("Location - process_write_id_chk\n")
+        f.write("Department - " + str(dept) + "\n")
+        f.write("Value - " + str(value) + "\n")
+        f.write("\n")
+        f.close()   
+        
+    with open(infile) as xmlin:
+        soup = bs(xmlin, 'xml')
+    
+    for department in soup.find_all('department'):
+        xmlin_dept = department.get_text().strip()
+        if xmlin_dept.lstrip("0") == str(dept).lstrip("0"):
+            x+=1
+            
+            new_tag = soup.new_tag("idChecks")
+            department.find_parent('PLU').append(new_tag)
+            department.find_parent('PLU').idChecks.append(soup.new_tag(idchk_value))
+            
+    xmlin.close()
+        
+    new_data = str(soup)
+    plu_new = open(outfile,"w")
+    plu_new.write(new_data)
+    plu_new.close()
+
+    set_date_time()
+    
+    f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
+    f.write("Writing ID Checks " + currdate + " " + currtime + "\n")
+    f.write("Department - " + str(dept) + "\n")
+    f.write("Value - " + str(value) + "\n")
+    f.write("Amount Added - " + str(x) + "\n")
+    f.write("\n")
+    f.close()   
+
+    if value == 1:
+        var.alcohol_id_count += x
+    elif value == 2:
+        var.tobacco_id_count += x
+    
+    

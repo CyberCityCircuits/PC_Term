@@ -20,10 +20,6 @@ from tkinter import Tk, Label, messagebox
 
 
 ###DEFINE VARIBLES
-app_name = var.app_name
-long_app = var.long_app
-version = var.version
-build_date = var.build_date
 
 
 #define system varibles
@@ -46,7 +42,7 @@ class Window(Frame):
         
 
     def init_window(self):
-        self.master.title(long_app)
+        self.master.title(var.long_app)
         #self.pack(fill=BOTH, expand=1)
         
         #exit_button = Button(self, text = "Exit", command=exit)
@@ -68,6 +64,7 @@ class Window(Frame):
         file_menu.add_command(label="Exit", command=tasks.client_exit)
         topbar.add_cascade(label="File", menu=file_menu)
         
+        plu_menu.add_command(label="Survey PLUs", command=tasks.survey_plus)
         plu_menu.add_command(label="Remove Product Codes", command=tasks.run_pc_term)
         plu_menu.add_command(label="Remove Food Stamp Checks", command=tasks.remove_fs)
         plu_menu.add_command(label="Reset ID Checks by Department", command=reset_idchks)
@@ -79,15 +76,16 @@ class Window(Frame):
         topbar.add_cascade(label="Help", menu=help_menu)
         
         
-        
-    
 def import_data():
     tasks.import_xml()
     show_dept()
     
+    
 def funct_not_supp():
     msg_error("Function Not Yet Supported")
     
+    
+#lists departments in the root window.
 def show_dept():
     if not Path(var.dir_temp + "/poscfg.xml").is_file():
         msg_error("P01: Check Error\n'poscfg.xml' Not Found. \n ")   
@@ -117,11 +115,13 @@ def show_dept():
         var.dept_list = dept_list
         
 def msg(text):
-    messagebox.showinfo(app_name, text)
+    messagebox.showinfo(var.long_app, text)
     
 def msg_error(text):
-    messagebox.showerror(app_name, text)
+    messagebox.showerror(var.long_app, text)
 
+    
+#command for reseting ID checks.    
 def reset_idchks():
     if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
         msg_error("T09: Check Error\nFile Not Found. \n ")   
@@ -137,15 +137,17 @@ def reset_idchks():
             "\n\n" + str(var.tobacco_id_count) + " Tobacco ID Checks Have Been Added"
             "\n" + str(var.alcohol_id_count) + " Alcohol ID Checks Have Been Added")
             
+#command for setting food stamps
 def set_fs():
     var.dept_food_stamps = []
     var.fs_count = 0
     tasks.set_food_stamps()
     msg(str(var.fs_count) +  " Food Stamp Checks Have Been Added")        
         
+#command for help > about
 def show_about():
-    msg(long_app + " V" + version + "\n"
-        "Build: " + build_date + "\n\n"
+    msg(var.name + "\n"
+        "Build: " + var.build_date + "\n\n"
         "By David Ray \n"
         "\n" + var.email + "\n\n"
         "www.DREAM-Enterprise.com")
