@@ -8,7 +8,7 @@ Created on Sun Feb  5 22:18:13 2017
 app_name = "PC_Term"
 long_app = "Product Code Terminator"
 version = "0.06.02"
-build_date = "02-17-2017"
+build_date = "03-13-2017"
 
 dir_fresh = "Put_XMLs_Here"
 dir_clean = "Processed_XMLs"

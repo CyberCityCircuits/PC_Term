@@ -266,7 +266,6 @@ def run_pc_term():
             "ensure you have all of the PLUs.")
         
         var.export_complete = 0
-            
     
 
 #set date and time        
@@ -275,51 +274,6 @@ def set_date_time():
     currdate = dt.date.today().strftime("%Y%m%d")
     currtime = dt.datetime.now().strftime("%H%M%S")
     
-        
-#Count PLUs, ID Checks, and Food Stamps.
-def survey_plus():
-    if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
-        msg_error("T16: Check Error\nPLUs File Not Found. \n ")   
-    else:
-        x = 0
-        file_idchk = (var.dir_temp + "/" + var.plu_xml)
-        tree = et.parse(file_idchk)
-        root = tree.getroot()
-        tobacco = (0)
-        alcohol = (0)
-        food_stamp = (0)
-        
-        #Count ID Checks
-        for c in root:
-            idchk = c.find('idChecks')    
-            flag = c.find('flags')    
-            if idchk:
-                if (c.find('idChecks')[0].attrib['sysid']) == str(2):
-                    #idchk_text = ("TOBACCO ID")
-                    tobacco += 1
-                elif (c.find('idChecks')[0].attrib['sysid']) == str(1):
-                    #idchk_text = ("ALCOHOL ID")
-                    alcohol += 1
-            if flag:
-                if (c.find('flags')[0].attrib['sysid']) == str(4):
-                    food_stamp += 1
-            x += 1
-                
-        msg("Tobacco ID Checks: " + str(tobacco) + "\n"
-            "Alcohol ID Checks: " + str(alcohol) + "\n"
-            "Food Stamp Checks: " + str(food_stamp) + "\n\n"
-            "PLUs Checked: " + str(x) + "\n\n")
-        
-        f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
-        log_currdate = dt.date.today().strftime("%m/%d/%Y")
-        log_currtime = dt.datetime.now().strftime("%H:%M:%S")
-        f.write("Survey PLUs - " + log_currdate + " " + log_currtime + "\n"
-                "Tobacco ID Checks: " + str(tobacco) + "\n"
-                "Alcohol ID Checks: " + str(alcohol) + "\n"
-                "Food Stamp Checks: " + str(food_stamp) + "\n\n"
-                "PLUs Checked: " + str(x) + "\n\n")
-        f.close()    
-
         
 #remove all id checks
 def remove_idchecks():
@@ -381,6 +335,53 @@ def remove_idchecks():
         f.close()
         
         msg("All ID Checks Have Been Removed.")
+
+        
+#Count PLUs, ID Checks, and Food Stamps.
+def survey_plus():
+    if not Path(var.dir_temp + "/" + var.plu_xml).is_file():
+        msg_error("T16: Check Error\nPLUs File Not Found. \n ")   
+    else:
+        x = 0
+        file_idchk = (var.dir_temp + "/" + var.plu_xml)
+        tree = et.parse(file_idchk)
+        root = tree.getroot()
+        tobacco = (0)
+        alcohol = (0)
+        food_stamp = (0)
+        
+        #Count ID Checks
+        for c in root:
+            idchk = c.find('idChecks')    
+            flag = c.find('flags')    
+            if idchk:
+                if (c.find('idChecks')[0].attrib['sysid']) == str(2):
+                    #idchk_text = ("TOBACCO ID")
+                    tobacco += 1
+                elif (c.find('idChecks')[0].attrib['sysid']) == str(1):
+                    #idchk_text = ("ALCOHOL ID")
+                    alcohol += 1
+            if flag:
+                if (c.find('flags')[0].attrib['sysid']) == str(4):
+                    food_stamp += 1
+            x += 1
+                
+        msg("Tobacco ID Checks: " + str(tobacco) + "\n"
+            "Alcohol ID Checks: " + str(alcohol) + "\n"
+            "Food Stamp Checks: " + str(food_stamp) + "\n\n"
+            "PLUs Checked: " + str(x) + "\n\n")
+        
+        f = open(var.dir_temp + "\\" + var.log_name + ".txt","a")
+        log_currdate = dt.date.today().strftime("%m/%d/%Y")
+        log_currtime = dt.datetime.now().strftime("%H:%M:%S")
+        f.write("Survey PLUs - " + log_currdate + " " + log_currtime + "\n"
+                "Tobacco ID Checks: " + str(tobacco) + "\n"
+                "Alcohol ID Checks: " + str(alcohol) + "\n"
+                "Food Stamp Checks: " + str(food_stamp) + "\n\n"
+                "PLUs Checked: " + str(x) + "\n\n")
+        f.close()    
+
+
 
         
 #Set Tobacco ID Checks    

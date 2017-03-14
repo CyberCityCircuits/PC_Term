@@ -21,7 +21,6 @@ from tkinter import Tk, Label, messagebox
 
 ###DEFINE VARIBLES
 
-
 #define system varibles
 currdate = dt.date.today().strftime("%Y%m%d")
 currtime = dt.datetime.now().strftime("%H%M%S")
@@ -59,6 +58,7 @@ class Window(Frame):
         help_menu = Menu(topbar)
         
         file_menu.add_command(label="Import Dataset", command=import_data)
+        #file_menu.add_command(label="Update", command=update)
         file_menu.add_command(label="Export Dataset", command=tasks.export_xml)
         #file_menu.add_command(label="List All Departments", command=tasks.list_dept)
         file_menu.add_command(label="Exit", command=tasks.client_exit)
@@ -84,36 +84,7 @@ def import_data():
 def funct_not_supp():
     msg_error("Function Not Yet Supported")
     
-    
-#lists departments in the root window.
-def show_dept():
-    if not Path(var.dir_temp + "/poscfg.xml").is_file():
-        msg_error("P01: Check Error\n'poscfg.xml' Not Found. \n ")   
-    else:
 
-        dept_list = []
-        
-        
-        tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
-        root_xml = tree.getroot()
-        
-        for dept in root_xml.iter('department'):
-            attributes = (dept.attrib)
-            sysid = (attributes["sysid"])
-            name = (attributes["name"])
-            
-            dept_list.append(sysid)
-            dept_list.append(name)
-
-        #msg("Processing Departments")
-        
-        for i, txt in enumerate(dept_list):
-            l = Label(root, text=txt)
-            row, col = divmod(i, 4)
-            l.grid(row=row+1, column=col, sticky=W)
-            
-        var.dept_list = dept_list
-        
 def msg(text):
     messagebox.showinfo(var.long_app, text)
     
@@ -151,6 +122,37 @@ def show_about():
         "By David Ray \n"
         "\n" + var.email + "\n\n"
         "www.DREAM-Enterprise.com")
+    
+    
+#lists departments in the root window.
+def show_dept():
+    if not Path(var.dir_temp + "/poscfg.xml").is_file():
+        msg_error("P01: Check Error\n'poscfg.xml' Not Found. \n ")   
+    else:
+
+        dept_list = []
+        
+        
+        tree = et.parse(var.dir_temp + "//" + "poscfg.xml")
+        root_xml = tree.getroot()
+        
+        for dept in root_xml.iter('department'):
+            attributes = (dept.attrib)
+            sysid = (attributes["sysid"])
+            name = (attributes["name"])
+            
+            dept_list.append(sysid)
+            dept_list.append(name)
+
+        #msg("Processing Departments")
+        
+        for i, txt in enumerate(dept_list):
+            l = Label(root, text=txt)
+            row, col = divmod(i, 4)
+            l.grid(row=row+1, column=col, sticky=W)
+            
+        var.dept_list = dept_list
+             
                 
 root = Tk()
 
