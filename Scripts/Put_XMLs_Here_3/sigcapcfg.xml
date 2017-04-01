@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<domain:sigCaptureConfig xmlns:domain="urn:vfi-sapphire:np.domain.2001-07-01" xmlns:vs="urn:vfi-sapphire:vs.2001-10-01" xmlns:base="urn:vfi-sapphire:base.2001-10-01"><site>AB123</site><siteParams><companyID></companyID><isPrintRcpt>0</isPrintRcpt><isDispSigCashier>0</isDispSigCashier><isStoreSigTLog>0</isStoreSigTLog><sigResolution>100</sigResolution><maxStorageSig>100</maxStorageSig><isPayWare>0</isPayWare></siteParams><registers><register sysid="101"><isSigCapEnable>0</isSigCapEnable></register></registers></domain:sigCaptureConfig>
