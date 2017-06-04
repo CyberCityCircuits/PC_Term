@@ -16,6 +16,13 @@ from pathlib import Path
 from bs4 import BeautifulSoup as bs
 import lxml.etree as et
 
+import serial #pySerial
+com = 'COM1'
+baud = 38400
+ser = serial.Serial(com, baud, timeout=0,parity=serial.PARITY_NONE)
+ser.close()
+
+
 #from tkinter import *
 from tkinter import messagebox, Label
 from tkinter import simpledialog
@@ -352,6 +359,7 @@ def survey_plus():
         
         #Count ID Checks
         for c in root:
+           
             idchk = c.find('idChecks')    
             flag = c.find('flags')    
             if idchk:
