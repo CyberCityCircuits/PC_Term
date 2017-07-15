@@ -16,11 +16,11 @@ from pathlib import Path
 from bs4 import BeautifulSoup as bs
 import lxml.etree as et
 
-import serial #pySerial
-com = 'COM1'
-baud = 38400
-ser = serial.Serial(com, baud, timeout=0,parity=serial.PARITY_NONE)
-ser.close()
+#import serial #pySerial
+#com = 'COM1'
+#baud = 38400
+#ser = serial.Serial(com, baud, timeout=0,parity=serial.PARITY_NONE)
+#ser.close()
 
 
 #from tkinter import *
@@ -77,7 +77,7 @@ def delete_file(file_name):
     if os.path.isfile(file_name):
         os.remove(file_name)
     else:
-        msg_error("T02: Delete Error\nFile Doesn't Exit")
+        msg_error("T02: Delete Error\nFile Doesn't Exist")
 
         
 def export_xml():

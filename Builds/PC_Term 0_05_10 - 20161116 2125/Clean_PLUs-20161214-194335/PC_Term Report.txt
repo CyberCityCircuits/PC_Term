@@ -1,5 +1,0 @@
-Product Code Terminator V0.05.10
-Starting Date - 12/14/2016
-Starting Time - 19:43:40
-
-There were 8816 PLUs in the file provided.
